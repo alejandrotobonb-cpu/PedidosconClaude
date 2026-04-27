@@ -7,9 +7,9 @@
 
   <!-- GHT Framework CDN -->
   <link crossorigin="anonymous" rel="stylesheet"
-        href="https://ghtstoragecdn.blob.core.windows.net/ghtframework/icons/V2.0/ght-icons.min.css"/>
+        href="https://ghtstoragecdn.blob.core.windows.net/styles/v2.0/ght-icons.min.css"/>
   <link crossorigin="anonymous" rel="stylesheet"
-        href="https://ghtstoragecdn.blob.core.windows.net/ghtframework/styles/V4.0/main.css"/>
+        href="https://ghtstoragecdn.blob.core.windows.net/libs/WebTemplate/styles/main.css"/>
 
   <style>
     /* ── Overrides y utilidades locales ── */
@@ -434,7 +434,7 @@
 
 <!-- GHT Framework JS -->
 <script crossorigin="anonymous"
-        src="https://ghtstoragecdn.blob.core.windows.net/ghtframework/scripts/V4.0/main.js"></script>
+        src="https://ghtstoragecdn.blob.core.windows.net/libs/WebTemplate/main.js"></script>
 
 <script>
 // ═══════════════════════════════════════════
@@ -461,14 +461,11 @@ let ghtToast, excelModal;
 // ═══════════════════════════════════════════
 // INIT FRAMEWORK
 // ═══════════════════════════════════════════
+new GHTFramework();
+
 document.addEventListener('DOMContentLoaded', () => {
-  initGHTFramework({
-    language: 'es', tooltip: true, textarea: true,
-    dropdown: true, collapsible: false, tabs: false,
-    accessibility: true, inputNumber: false,
-    cards: true, resize: false, mutation: true
-  });
   ghtToast = new GHTToast();
+  new GHTTextarea();
   excelModal = new GHTModal({
     selector: '#GHTModal-excel',
     isDraggable: true, keyboard: true, outsideClick: true
@@ -684,7 +681,6 @@ function renderRight(o) {
       </div>
     </div>`;
 
-  initGHTFramework({ textarea: true });
 }
 
 // ═══════════════════════════════════════════
