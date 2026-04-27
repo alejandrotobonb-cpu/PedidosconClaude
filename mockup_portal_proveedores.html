@@ -1,605 +1,483 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Control Pendientes de Entrega GHT – Proveedores</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; background: #f4f6f8; color: #222; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Pendientes de Entrega GHT – Proveedores</title>
 
-  /* ─── HEADER ─────────────────────────────────────── */
-  .header {
-    background: #2E7D32;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    height: 52px;
-    position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 2px 6px rgba(0,0,0,.25);
-  }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .logo {
-    background: #fff;
-    color: #2E7D32;
-    font-weight: 800;
-    font-size: 16px;
-    padding: 4px 10px;
-    border-radius: 4px;
-    letter-spacing: 1px;
-  }
-  .header-title { font-size: 15px; font-weight: 600; }
-  .header-right { display: flex; align-items: center; gap: 14px; font-size: 13px; }
-  .user-badge { background: rgba(255,255,255,.2); border-radius: 20px; padding: 4px 12px; }
-  .btn-header {
-    background: rgba(255,255,255,.15);
-    border: 1px solid rgba(255,255,255,.4);
-    color: #fff;
-    border-radius: 4px;
-    padding: 5px 12px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: background .2s;
-  }
-  .btn-header:hover { background: rgba(255,255,255,.3); }
+  <!-- GHT Framework CDN -->
+  <link crossorigin="anonymous" rel="stylesheet"
+        href="https://ghtstoragecdn.blob.core.windows.net/ghtframework/icons/V2.0/ght-icons.min.css"/>
+  <link crossorigin="anonymous" rel="stylesheet"
+        href="https://ghtstoragecdn.blob.core.windows.net/ghtframework/styles/V4.0/main.css"/>
 
-  /* ─── PAGES ──────────────────────────────────────── */
-  .page { display: none; }
-  .page.active { display: block; }
+  <style>
+    /* ── Overrides y utilidades locales ── */
+    html, body { height: 100%; margin: 0; padding: 0; }
+    body { background: var(--stroke-shadow-gray-100, #f4f6f8); }
 
-  /* ─── LOGIN ──────────────────────────────────────── */
-  #page-login {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #1B5E20 0%, #388E3C 60%, #66BB6A 100%);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .login-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 48px 40px;
-    width: 380px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.25);
-    text-align: center;
-  }
-  .login-logo {
-    background: #2E7D32;
-    color: #fff;
-    font-weight: 900;
-    font-size: 28px;
-    display: inline-block;
-    padding: 10px 22px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    letter-spacing: 2px;
-  }
-  .login-subtitle { color: #555; font-size: 13px; margin-bottom: 28px; }
-  .login-card h2 { font-size: 18px; color: #1B5E20; margin-bottom: 6px; }
-  .login-card p { font-size: 13px; color: #777; margin-bottom: 24px; }
-  .form-group { margin-bottom: 16px; text-align: left; }
-  .form-group label { font-size: 12px; color: #555; display: block; margin-bottom: 4px; font-weight: 600; }
-  .form-group input {
-    width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 6px;
-    font-size: 14px; transition: border .2s;
-  }
-  .form-group input:focus { outline: none; border-color: #2E7D32; }
-  .btn-login {
-    width: 100%; background: #2E7D32; color: #fff; border: none;
-    padding: 12px; border-radius: 6px; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: background .2s; margin-top: 4px;
-  }
-  .btn-login:hover { background: #1B5E20; }
-  .ad-note { margin-top: 14px; font-size: 11px; color: #aaa; }
+    /* Páginas */
+    .page { display: none; }
+    .page.active { display: flex; flex-direction: column; min-height: 100vh; }
+    #page-main.active { display: block; min-height: 100vh; }
 
-  /* ─── INSTRUCTIVO ────────────────────────────────── */
-  #page-instructivo { min-height: calc(100vh - 52px); background: #f4f6f8; padding: 32px 20px; }
-  .instructivo-card {
-    max-width: 760px; margin: 0 auto;
-    background: #fff; border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(0,0,0,.1);
-    overflow: hidden;
-  }
-  .instructivo-body { padding: 36px 40px; }
-  .welcome-title { font-size: 22px; font-weight: 700; color: #1B5E20; margin-bottom: 6px; }
-  .welcome-sub { color: #555; font-size: 14px; margin-bottom: 28px; }
-  .info-box {
-    background: #E8F5E9; border-left: 4px solid #2E7D32;
-    border-radius: 0 6px 6px 0; padding: 16px 20px; margin-bottom: 20px;
-  }
-  .info-box h3 { color: #1B5E20; font-size: 14px; margin-bottom: 10px; }
-  .info-box ul { padding-left: 4px; list-style: none; }
-  .info-box ul li { padding: 4px 0; color: #333; font-size: 13px; }
-  .info-box ul li::before { content: "👉 "; }
-  .warning-box {
-    background: #FFF8E1; border-left: 4px solid #F57C00;
-    border-radius: 0 6px 6px 0; padding: 16px 20px; margin-bottom: 28px;
-  }
-  .warning-box h3 { color: #E65100; font-size: 14px; margin-bottom: 10px; }
-  .warning-box ul { padding-left: 4px; list-style: none; }
-  .warning-box ul li { padding: 4px 0; color: #444; font-size: 13px; }
-  .warning-box ul li::before { content: "⚠️ "; }
-  .instructivo-footer {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 16px 40px; background: #f9f9f9; border-top: 1px solid #eee;
-  }
-  .footer-note { font-size: 12px; color: #888; }
-  .btn-next {
-    background: #2E7D32; color: #fff; border: none;
-    padding: 10px 28px; border-radius: 6px; font-size: 14px;
-    font-weight: 600; cursor: pointer; transition: background .2s;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .btn-next:hover { background: #1B5E20; }
+    /* ── LOGIN ── */
+    .login-bg {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 55%, #43A047 100%);
+      min-height: 100vh;
+    }
+    .login-box { width: 380px; }
+    .login-logo-wrap {
+      text-align: center; margin-bottom: 24px;
+    }
+    .login-logo {
+      display: inline-block; background: #fff; color: #2E7D32;
+      font-weight: 900; font-size: 28px; padding: 10px 24px;
+      border-radius: 8px; letter-spacing: 3px;
+    }
+    .login-appname {
+      display: block; color: rgba(255,255,255,.85);
+      font-size: 13px; margin-top: 8px; letter-spacing: .5px;
+    }
+    .login-card-inner { padding: 32px; }
+    .login-card-inner h2 { font-size: 18px; margin-bottom: 4px; }
+    .login-card-inner p  { font-size: 13px; color: var(--stroke-shadow-gray-600,#666); margin-bottom: 24px; }
+    .ad-note { text-align: center; font-size: 11px; color: var(--stroke-shadow-gray-500,#888); margin-top: 14px; }
 
-  /* ─── MAIN PANEL ─────────────────────────────────── */
-  #page-main { min-height: calc(100vh - 52px); background: #f0f2f5; }
-  .main-toolbar {
-    background: #fff; padding: 8px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid #e0e0e0; font-size: 13px; color: #555;
-  }
-  .toolbar-info { display: flex; gap: 20px; align-items: center; }
-  .badge-stat {
-    display: flex; align-items: center; gap: 6px;
-    background: #f4f6f8; border-radius: 20px; padding: 4px 12px;
-  }
-  .badge-stat span { font-weight: 700; }
-  .badge-stat .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .btn-excel {
-    background: #1B6E23; color: #fff; border: none;
-    padding: 7px 16px; border-radius: 5px; font-size: 12px;
-    cursor: pointer; transition: background .2s; display: flex; align-items: center; gap: 6px;
-  }
-  .btn-excel:hover { background: #145219; }
+    /* ── INSTRUCTIVO ── */
+    .instructivo-wrap {
+      flex: 1; padding: 28px 20px;
+      display: flex; align-items: flex-start; justify-content: center;
+    }
+    .instructivo-card-inner { max-width: 760px; width: 100%; }
+    .instr-title { font-size: 22px; font-weight: 700; color: #1B5E20; margin-bottom: 4px; }
+    .instr-sub   { font-size: 13px; color: var(--stroke-shadow-gray-600,#555); margin-bottom: 24px; }
+    .instr-section { margin-bottom: 16px; }
+    .instr-section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #333; }
+    .instr-step { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; font-size: 13px; color: #333; }
+    .step-num {
+      min-width: 24px; height: 24px; border-radius: 50%;
+      background: #2E7D32; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+    .instr-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 0; border-top: 1px solid var(--stroke-shadow-gray-200,#eee); margin-top: 8px;
+    }
+    .instr-footer-note { font-size: 11px; color: var(--stroke-shadow-gray-500,#999); }
 
-  .panels-grid {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    grid-template-rows: auto 1fr;
-    gap: 0;
-    height: calc(100vh - 52px - 44px);
-  }
+    /* ── MAIN LAYOUT ── */
+    .app-toolbar {
+      background: #fff; border-bottom: 1px solid var(--stroke-shadow-gray-200,#e0e0e0);
+      padding: 8px 16px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .toolbar-stats { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
-  /* Panel 2 – lista */
-  .panel-list {
-    grid-row: 1 / 3;
-    background: #fff;
-    border-right: 1px solid #e0e0e0;
-    overflow-y: auto;
-    display: flex; flex-direction: column;
-  }
-  .panel-list-header {
-    padding: 12px 14px;
-    background: #f9f9f9;
-    border-bottom: 1px solid #eee;
-    font-weight: 700; font-size: 13px; color: #333;
-    position: sticky; top: 0; z-index: 10;
-  }
-  .oc-item {
-    padding: 10px 14px;
-    border-bottom: 1px solid #f0f0f0;
-    cursor: pointer;
-    transition: background .15s;
-    display: grid;
-    grid-template-columns: 52px 1fr;
-    gap: 8px;
-    align-items: start;
-  }
-  .oc-item:hover { background: #f5f5f5; }
-  .oc-item.selected { background: #E3F2FD; border-left: 3px solid #1565C0; }
-  .oc-days {
-    text-align: center;
-    font-weight: 800;
-    font-size: 15px;
-    border-radius: 6px;
-    padding: 6px 4px;
-    line-height: 1.1;
-  }
-  .oc-days small { font-size: 9px; font-weight: 500; display: block; }
-  .days-red { background: #FFEBEE; color: #C62828; }
-  .days-orange { background: #FFF3E0; color: #E65100; }
-  .days-green { background: #E8F5E9; color: #2E7D32; }
-  .oc-info { overflow: hidden; }
-  .oc-finca { font-size: 11px; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .oc-num { font-weight: 700; font-size: 13px; color: #1B5E20; }
-  .oc-art { font-size: 12px; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
-  .badge-urgente {
-    display: inline-block;
-    background: #B71C1C; color: #fff;
-    font-size: 9px; font-weight: 700;
-    padding: 1px 5px; border-radius: 3px;
-    margin-top: 3px; letter-spacing: .5px;
-  }
-  .badge-comentado {
-    display: inline-block;
-    background: #E8F5E9; color: #2E7D32;
-    font-size: 9px; font-weight: 600;
-    padding: 1px 5px; border-radius: 3px;
-    margin-top: 3px; border: 1px solid #A5D6A7;
-  }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      height: calc(100vh - 52px - 46px);
+    }
 
-  /* Panel 1 – indicador días */
-  .panel-indicator {
-    background: #fff;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 14px 20px;
-    display: flex; align-items: center; gap: 20px;
-  }
-  .indicator-box {
-    border-radius: 10px;
-    padding: 12px 20px;
-    text-align: center;
-    min-width: 110px;
-  }
-  .indicator-box .ind-num { font-size: 34px; font-weight: 900; line-height: 1; }
-  .indicator-box .ind-label { font-size: 11px; font-weight: 500; margin-top: 2px; }
-  .ind-red { background: #FFEBEE; color: #C62828; }
-  .ind-orange { background: #FFF3E0; color: #E65100; }
-  .ind-green { background: #E8F5E9; color: #2E7D32; }
-  .indicator-meta { flex: 1; }
-  .indicator-meta h3 { font-size: 15px; color: #1B5E20; font-weight: 700; margin-bottom: 4px; }
-  .indicator-meta p { font-size: 12px; color: #777; }
-  .indicator-meta .tag-urgente {
-    display: inline-block;
-    background: #B71C1C; color: #fff;
-    font-size: 11px; font-weight: 700;
-    padding: 2px 10px; border-radius: 4px;
-    margin-top: 4px; letter-spacing: 1px;
-  }
+    /* Panel lista */
+    .panel-list {
+      border-right: 1px solid var(--stroke-shadow-gray-200,#e0e0e0);
+      background: #fff; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .panel-list-head {
+      padding: 12px 12px 0; background: #fff;
+      border-bottom: 1px solid var(--stroke-shadow-gray-200,#eee);
+      position: sticky; top: 0; z-index: 5;
+    }
+    .panel-list-head-title {
+      font-size: 13px; font-weight: 700; color: #333; margin-bottom: 8px;
+    }
+    .oc-scroll { overflow-y: auto; flex: 1; }
+    .oc-item {
+      display: grid; grid-template-columns: 56px 1fr;
+      gap: 10px; padding: 10px 12px;
+      border-bottom: 1px solid var(--stroke-shadow-gray-100,#f5f5f5);
+      cursor: pointer; transition: background .15s; align-items: start;
+    }
+    .oc-item:hover { background: var(--stroke-shadow-gray-50,#fafafa); }
+    .oc-item.selected {
+      background: #E3F2FD;
+      border-left: 3px solid #1565C0;
+      padding-left: 9px;
+    }
+    .oc-dias-box {
+      border-radius: 6px; padding: 6px 4px; text-align: center;
+      font-weight: 800; font-size: 15px; line-height: 1.1;
+    }
+    .oc-dias-box small { font-size: 9px; font-weight: 500; display: block; }
+    .dias-red    { background: #FFEBEE; color: #C62828; }
+    .dias-orange { background: #FFF3E0; color: #E65100; }
+    .dias-green  { background: #E8F5E9; color: #2E7D32; }
+    .oc-info { overflow: hidden; }
+    .oc-finca { font-size: 11px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .oc-num   { font-weight: 700; font-size: 13px; color: #1B5E20; }
+    .oc-art   { font-size: 12px; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+    .oc-tags  { margin-top: 3px; display: flex; gap: 4px; flex-wrap: wrap; }
 
-  /* Panel 3 + 4 */
-  .panel-right {
-    overflow-y: auto;
-    padding: 0;
-    display: flex; flex-direction: column; gap: 0;
-  }
-  .panel-card {
-    background: #fff;
-    margin: 12px 12px 0 12px;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
-    overflow: hidden;
-  }
-  .panel-card:last-child { margin-bottom: 12px; }
-  .panel-card-header {
-    background: #f9f9f9;
-    padding: 10px 16px;
-    font-weight: 700; font-size: 13px; color: #333;
-    border-bottom: 1px solid #eee;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .panel-card-header .dot-panel { width: 10px; height: 10px; border-radius: 50%; }
-  .panel-card-body { padding: 16px; }
+    /* Panel derecho */
+    .panel-right {
+      overflow-y: auto; padding: 0; background: var(--stroke-shadow-gray-100,#f4f6f8);
+      display: flex; flex-direction: column; gap: 0;
+    }
 
-  /* Detalle */
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .detail-field label { font-size: 11px; color: #888; font-weight: 600; display: block; margin-bottom: 2px; }
-  .detail-field span { font-size: 13px; color: #222; }
-  .detail-field.full { grid-column: 1 / 3; }
-  .detail-obs {
-    background: #f9f9f9; border-radius: 4px; padding: 8px 10px;
-    font-size: 12px; color: #444; margin-top: 4px; border: 1px solid #eee;
-  }
+    /* Indicador */
+    .indicator-row {
+      display: flex; align-items: center; gap: 16px;
+      background: #fff; padding: 12px 16px;
+      border-bottom: 1px solid var(--stroke-shadow-gray-200,#eee);
+    }
+    .ind-box {
+      border-radius: 8px; padding: 10px 18px; text-align: center; min-width: 100px;
+    }
+    .ind-num   { font-size: 32px; font-weight: 900; line-height: 1; }
+    .ind-label { font-size: 10px; font-weight: 500; margin-top: 2px; }
+    .ind-red    { background: #FFEBEE; color: #C62828; }
+    .ind-orange { background: #FFF3E0; color: #E65100; }
+    .ind-green  { background: #E8F5E9; color: #2E7D32; }
+    .ind-meta h3 { font-size: 15px; font-weight: 700; color: #1B5E20; margin-bottom: 4px; }
+    .ind-meta p  { font-size: 12px; color: #777; }
 
-  /* Panel 4 – comentarios */
-  .form-row { margin-bottom: 14px; }
-  .form-row label { font-size: 12px; color: #555; font-weight: 600; display: block; margin-bottom: 5px; }
-  .form-row label .req { color: #C62828; }
-  .form-row textarea, .form-row input[type=text], .form-row input[type=date] {
-    width: 100%; padding: 9px 12px;
-    border: 1.5px solid #ddd; border-radius: 6px;
-    font-size: 13px; font-family: inherit;
-    transition: border .2s; resize: vertical;
-  }
-  .form-row textarea:focus, .form-row input:focus { outline: none; border-color: #2E7D32; }
-  .form-row textarea { min-height: 80px; }
-  .form-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .upload-area {
-    border: 2px dashed #ccc; border-radius: 6px;
-    padding: 16px; text-align: center; color: #888; font-size: 12px;
-    cursor: pointer; transition: border .2s, background .2s;
-  }
-  .upload-area:hover { border-color: #2E7D32; background: #f1f8f1; }
-  .upload-area .upload-icon { font-size: 24px; margin-bottom: 6px; }
-  .file-list { margin-top: 8px; }
-  .file-item {
-    display: flex; align-items: center; gap: 8px;
-    background: #f4f6f8; border-radius: 4px;
-    padding: 6px 10px; margin-top: 6px; font-size: 12px;
-  }
-  .file-item .file-remove { margin-left: auto; color: #C62828; cursor: pointer; font-weight: 700; }
-  .form-footer { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 4px; }
-  .btn-save {
-    background: #2E7D32; color: #fff; border: none;
-    padding: 10px 24px; border-radius: 6px; font-size: 14px;
-    font-weight: 700; cursor: pointer; transition: background .2s;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .btn-save:hover { background: #1B5E20; }
-  .btn-save:disabled { background: #aaa; cursor: not-allowed; }
-  .save-note { font-size: 11px; color: #888; }
+    /* Cards de detalle */
+    .detail-panel { padding: 12px 12px 0; }
+    .detail-panel:last-child { padding-bottom: 12px; }
+    .panel-card-title {
+      font-size: 12px; font-weight: 700; color: #555;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .panel-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
-  /* ─── TOAST ──────────────────────────────────────── */
-  .toast {
-    position: fixed; bottom: 24px; right: 24px;
-    background: #1B5E20; color: #fff;
-    padding: 14px 20px; border-radius: 8px;
-    font-size: 13px; font-weight: 500;
-    box-shadow: 0 4px 16px rgba(0,0,0,.25);
-    display: flex; align-items: center; gap: 10px;
-    transform: translateY(100px); opacity: 0;
-    transition: transform .3s, opacity .3s;
-    z-index: 999;
-  }
-  .toast.show { transform: translateY(0); opacity: 1; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+    .detail-field label { font-size: 11px; color: #888; font-weight: 600; display: block; margin-bottom: 2px; }
+    .detail-field span  { font-size: 13px; color: #222; }
+    .detail-field.full  { grid-column: 1 / 3; }
+    .obs-box {
+      background: var(--stroke-shadow-gray-50,#f9f9f9);
+      border: 1px solid var(--stroke-shadow-gray-200,#eee);
+      border-radius: 4px; padding: 8px 10px; font-size: 12px; color: #555;
+    }
 
-  /* ─── EMPTY STATE ────────────────────────────────── */
-  .empty-state {
-    text-align: center; padding: 60px 20px; color: #aaa;
-  }
-  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
-  .empty-state p { font-size: 13px; }
+    /* Archivo adjunto */
+    .file-list-items { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .file-item {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--stroke-shadow-gray-100,#f4f6f8);
+      border-radius: 4px; padding: 6px 10px; font-size: 12px;
+    }
+    .file-remove { margin-left: auto; color: #C62828; cursor: pointer; font-weight: 700; }
 
-  /* ─── MODAL EXCEL ────────────────────────────────── */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.45);
-    display: none; align-items: center; justify-content: center; z-index: 200;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal {
-    background: #fff; border-radius: 10px;
-    padding: 28px; width: 480px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.2);
-  }
-  .modal h3 { font-size: 16px; color: #1B5E20; margin-bottom: 16px; }
-  .modal table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px; }
-  .modal th { background: #E8F5E9; padding: 8px 10px; text-align: left; color: #1B5E20; }
-  .modal td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; color: #444; }
-  .modal-footer { display: flex; justify-content: flex-end; gap: 10px; }
-  .btn-cancel {
-    background: #f4f4f4; color: #555; border: 1px solid #ddd;
-    padding: 8px 18px; border-radius: 5px; cursor: pointer; font-size: 13px;
-  }
-  .btn-download {
-    background: #2E7D32; color: #fff; border: none;
-    padding: 8px 18px; border-radius: 5px; cursor: pointer;
-    font-size: 13px; font-weight: 600;
-  }
+    /* Empty state */
+    .empty-center {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; flex: 1; padding: 48px 20px;
+      color: var(--stroke-shadow-gray-400,#bbb); text-align: center;
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
 
-  /* ─── SCROLLBAR ──────────────────────────────────── */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #aaa; }
+    /* Filtros */
+    .filter-row { display: flex; gap: 4px; margin: 6px 0 10px; flex-wrap: wrap; }
+    .filter-chip {
+      font-size: 11px; padding: 3px 10px; border-radius: 12px;
+      border: 1px solid var(--stroke-shadow-gray-300,#ddd);
+      background: #fff; cursor: pointer; color: #555; transition: all .15s;
+    }
+    .filter-chip.active { background: #2E7D32; color: #fff; border-color: #2E7D32; }
 
-  /* ─── SEARCH ─────────────────────────────────────── */
-  .search-input {
-    width: 100%; padding: 7px 10px;
-    border: 1px solid #e0e0e0; border-radius: 5px;
-    font-size: 12px; margin-bottom: 8px;
-  }
-  .search-input:focus { outline: none; border-color: #2E7D32; }
-  .filter-row {
-    display: flex; gap: 6px; margin-bottom: 4px;
-  }
-  .filter-btn {
-    font-size: 10px; padding: 3px 8px; border-radius: 10px;
-    border: 1px solid #ddd; background: #fff; cursor: pointer;
-    color: #555; transition: all .15s;
-  }
-  .filter-btn.active { background: #2E7D32; color: #fff; border-color: #2E7D32; }
-</style>
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+    /* Guardado tag */
+    .saved-tag { margin-left: auto; font-size: 11px; font-weight: 400; color: #2E7D32; }
+  </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════
-     PÁGINA 0: LOGIN
-═══════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     PÁGINA LOGIN
+════════════════════════════════════════ -->
 <div id="page-login" class="page active">
-  <div style="height:100vh; background:linear-gradient(135deg,#1B5E20 0%,#388E3C 60%,#66BB6A 100%); display:flex; align-items:center; justify-content:center;">
-    <div class="login-card">
-      <div class="login-logo">GHT</div>
-      <div class="login-subtitle">Growers Hub Trading</div>
-      <h2>Portal de Proveedores</h2>
-      <p>Ingresa con tus credenciales corporativas</p>
-      <div class="form-group">
-        <label>Usuario (correo corporativo)</label>
-        <input type="text" id="input-user" value="proveedor@agricolasac.com" placeholder="usuario@empresa.com">
+  <div class="login-bg">
+    <div class="login-box">
+      <div class="login-logo-wrap">
+        <span class="login-logo">GHT</span>
+        <span class="login-appname">Growers Hub Trading · Portal de Proveedores</span>
       </div>
-      <div class="form-group">
-        <label>Contraseña</label>
-        <input type="password" value="••••••••" placeholder="Contraseña">
+
+      <div class="ght-card">
+        <div class="login-card-inner">
+          <h2>Bienvenido</h2>
+          <p>Ingresa con tus credenciales corporativas para acceder al portal</p>
+
+          <div class="ght-textfield-container ght-mb-16">
+            <label class="ght-textfield-label">Usuario (correo corporativo)</label>
+            <div class="ght-textfield-wrapper ght-medium">
+              <input type="text" class="ght-textfield" value="proveedor@agricolasac.com">
+              <i class="ght-icons ght-icons-user"></i>
+            </div>
+          </div>
+
+          <div class="ght-textfield-container ght-mb-24">
+            <label class="ght-textfield-label">Contraseña</label>
+            <div class="ght-textfield-wrapper ght-medium">
+              <input type="password" class="ght-textfield" value="password123">
+              <i class="ght-icons ght-icons-hide"></i>
+            </div>
+          </div>
+
+          <button class="ght-btn ght-btn-primary ght-btn-medium ght-width-100" onclick="goToInstructivo()">
+            <i class="ght-icons ght-icons-enter"></i>
+            <span class="ght-btn-text">Ingresar</span>
+          </button>
+
+          <p class="ad-note">🔒 Autenticación segura via Directorio Activo GHT</p>
+        </div>
       </div>
-      <button class="btn-login" onclick="goToInstructivo()">Ingresar →</button>
-      <p class="ad-note">🔒 Autenticación segura via Directorio Activo GHT</p>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     ENCABEZADO GLOBAL (oculto en login)
-═══════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     HEADER GLOBAL
+════════════════════════════════════════ -->
 <div id="global-header" style="display:none;">
-  <div class="header">
-    <div class="header-left">
-      <div class="logo">GHT</div>
-      <span class="header-title">Control Pendientes de Entrega GHT – Proveedores</span>
+  <header class="ght-header ght-header-classic">
+    <div class="ght-header-title">
+      <span class="ght-header-classic-title-text">Control Pendientes de Entrega GHT – Proveedores</span>
     </div>
-    <div class="header-right">
-      <span class="user-badge">👤 Agrícola SAC Ltda.</span>
-      <button class="btn-header" onclick="showModal()">📊 Exportar Excel</button>
-      <button class="btn-header" onclick="logout()">⎋ Salir</button>
+    <div class="ght-header-banner-info">
+      <span class="ght-header-banner-info-text">Agrícola SAC Ltda. · NIT 900.123.456-7</span>
+      <i class="ght-icons ght-icons-information"></i>
     </div>
-  </div>
+    <div class="ght-header-tools">
+      <button type="button" class="ght-btn ght-btn-secondary ght-btn-small" onclick="showExcelModal()">
+        <i class="ght-icons ght-icons-download"></i>
+        <span class="ght-btn-text">Exportar Excel</span>
+      </button>
+      <button type="button" class="ght-btn ght-btn-tertiary ght-btn-small" onclick="logout()">
+        <i class="ght-icons ght-icons-exit"></i>
+        <span class="ght-btn-text">Salir</span>
+      </button>
+    </div>
+  </header>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     PÁGINA 1: INSTRUCTIVO
-═══════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     PÁGINA INSTRUCTIVO
+════════════════════════════════════════ -->
 <div id="page-instructivo" class="page">
-  <div style="padding:32px 20px; background:#f4f6f8; min-height:calc(100vh - 52px);">
-    <div class="instructivo-card">
-      <div class="instructivo-body">
-        <div class="welcome-title">¡Bienvenido, estimado proveedor! 👋</div>
-        <div class="welcome-sub">Has ingresado como: <strong>Agrícola SAC Ltda.</strong> · NIT: 900.123.456-7</div>
+  <div class="instructivo-wrap">
+    <div class="instructivo-card-inner">
+      <div class="ght-card">
+        <div class="ght-card-body" style="padding:32px 36px;">
 
-        <div class="info-box">
-          <h3>¿Qué puedes hacer en esta aplicación?</h3>
-          <ul>
-            <li>Consultar tus pedidos pendientes de entrega con GHT</li>
-            <li>Ver el detalle completo de cada orden de compra</li>
-            <li>Registrar comentarios y fechas compromiso de entrega</li>
-            <li>Adjuntar documentos de soporte (facturas, guías, fotos)</li>
-          </ul>
-        </div>
+          <div class="instr-title">¡Bienvenido, estimado proveedor! 👋</div>
+          <div class="instr-sub">Has ingresado como: <strong>Agrícola SAC Ltda.</strong> · Usuario: proveedor@agricolasac.com</div>
 
-        <div class="info-box" style="background:#E3F2FD; border-color:#1565C0;">
-          <h3 style="color:#1565C0;">👉 Pasos para registrar un comentario</h3>
-          <ul style="">
-            <li style="list-style:none;">1. Selecciona un pedido de la lista (panel izquierdo)</li>
-            <li style="list-style:none;">2. Revisa el detalle del pedido (panel derecho superior)</li>
-            <li style="list-style:none;">3. Escribe tu comentario en el panel inferior</li>
-            <li style="list-style:none;">4. Haz clic en 💾 Guardar — ¡es obligatorio!</li>
-          </ul>
-        </div>
+          <!-- Propósito -->
+          <div class="ght-card" style="border-left: 4px solid #2E7D32; margin-bottom:16px;">
+            <div class="ght-card-body">
+              <div class="instr-section-title">¿Qué puedes hacer en esta aplicación?</div>
+              <div class="instr-step"><div class="step-num">✓</div><span>Consultar tus pedidos pendientes de entrega con GHT</span></div>
+              <div class="instr-step"><div class="step-num">✓</div><span>Ver el detalle completo de cada orden de compra</span></div>
+              <div class="instr-step"><div class="step-num">✓</div><span>Registrar comentarios y fechas compromiso de entrega</span></div>
+              <div class="instr-step"><div class="step-num">✓</div><span>Adjuntar documentos de soporte: facturas, guías, fotos, remisiones</span></div>
+            </div>
+          </div>
 
-        <div class="warning-box">
-          <h3>Información importante</h3>
-          <ul>
-            <li>Debes presionar el botón 💾 <strong>Guardar</strong> para que tu comentario quede registrado</li>
-            <li>La información que registres es visible para el equipo de compras GHT</li>
-            <li>Solo puedes ver los pedidos de tu empresa</li>
-            <li>Los pedidos marcados en <span style="color:#B71C1C;font-weight:700;">ROJO URGENTE</span> requieren atención inmediata</li>
-            <li>Para novedades críticas, contacta a tu comprador asignado por correo</li>
-          </ul>
-        </div>
-      </div>
-      <div class="instructivo-footer">
-        <div>
-          <div class="footer-note">Usuario activo: proveedor@agricolasac.com</div>
-          <div class="footer-note">GHT – Growers Hub Trading · Solo ves información de tu empresa</div>
-        </div>
-        <button class="btn-next" onclick="goToMain()">
-          Ver mis pedidos ➡️
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+          <!-- Pasos -->
+          <div class="ght-card" style="border-left: 4px solid #1565C0; margin-bottom:16px;">
+            <div class="ght-card-body">
+              <div class="instr-section-title">👉 Pasos para registrar un comentario</div>
+              <div class="instr-step"><div class="step-num">1</div><span>Selecciona un pedido de la lista (panel izquierdo)</span></div>
+              <div class="instr-step"><div class="step-num">2</div><span>Revisa el detalle completo del pedido en el panel derecho</span></div>
+              <div class="instr-step"><div class="step-num">3</div><span>Escribe tu comentario en el campo habilitado</span></div>
+              <div class="instr-step"><div class="step-num">4</div><span>Haz clic en <strong>💾 Guardar</strong> — sin este paso el comentario no quedará registrado</span></div>
+            </div>
+          </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     PÁGINA 2: PANEL PRINCIPAL
-═══════════════════════════════════════════════════════ -->
-<div id="page-main" class="page">
-  <!-- Toolbar -->
-  <div class="main-toolbar">
-    <div class="toolbar-info">
-      <div class="badge-stat">
-        <div class="dot" style="background:#C62828;"></div>
-        <span id="count-vencidos">0</span> vencidos
-      </div>
-      <div class="badge-stat">
-        <div class="dot" style="background:#E65100;"></div>
-        <span id="count-proximos">0</span> próximos a vencer (≤6 días)
-      </div>
-      <div class="badge-stat">
-        <div class="dot" style="background:#B71C1C;"></div>
-        <span id="count-urgentes">0</span> urgentes
-      </div>
-      <div class="badge-stat" style="background:#e8f5e9;">
-        Total: <span id="count-total" style="font-weight:700;">&nbsp;</span> pedidos
-      </div>
-    </div>
-    <button class="btn-excel" onclick="showModal()">📊 Exportar comentarios Excel</button>
-  </div>
+          <!-- Advertencias -->
+          <div class="ght-card" style="border-left: 4px solid #E65100; margin-bottom:16px;">
+            <div class="ght-card-body">
+              <div class="instr-section-title" style="color:#E65100;">⚠️ Información importante</div>
+              <div class="instr-step"><div class="step-num" style="background:#E65100;">!</div><span>Debes presionar 💾 <strong>Guardar</strong> para que tu comentario quede registrado</span></div>
+              <div class="instr-step"><div class="step-num" style="background:#E65100;">!</div><span>La información registrada es visible para el equipo de compras GHT</span></div>
+              <div class="instr-step"><div class="step-num" style="background:#E65100;">!</div><span>Solo puedes ver los pedidos de tu empresa</span></div>
+              <div class="instr-step"><div class="step-num" style="background:#B71C1C;">!</div><span>Los pedidos marcados como <span class="ght-badge ght-badge-error" style="font-size:10px;">URGENTE</span> requieren atención inmediata</span></div>
+            </div>
+          </div>
 
-  <div class="panels-grid">
-    <!-- PANEL 2: LISTA -->
-    <div class="panel-list">
-      <div class="panel-list-header">
-        📋 Pedidos Pendientes
-        <div style="margin-top:8px;">
-          <input class="search-input" type="text" placeholder="🔍 Buscar OC, artículo, finca…" oninput="filterList(this.value)">
-          <div class="filter-row">
-            <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
-            <button class="filter-btn" onclick="setFilter('vencidos',this)">Vencidos</button>
-            <button class="filter-btn" onclick="setFilter('proximos',this)">≤6 días</button>
-            <button class="filter-btn" onclick="setFilter('urgentes',this)">Urgentes</button>
+          <div class="instr-footer">
+            <div>
+              <div class="instr-footer-note">GHT – Growers Hub Trading</div>
+              <div class="instr-footer-note">Solo visualizas información de tu empresa</div>
+            </div>
+            <button class="ght-btn ght-btn-primary ght-btn-medium" onclick="goToMain()">
+              <span class="ght-btn-text">Ver mis pedidos</span>
+              <i class="ght-icons ght-icons-arrow-right"></i>
+            </button>
           </div>
         </div>
       </div>
-      <div id="oc-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA PRINCIPAL
+════════════════════════════════════════ -->
+<div id="page-main" class="page">
+
+  <!-- Toolbar stats -->
+  <div class="app-toolbar">
+    <div class="toolbar-stats">
+      <span class="ght-badge ght-badge-error" id="badge-vencidos">0 vencidos</span>
+      <span class="ght-badge ght-badge-warning" id="badge-proximos">0 próximos ≤6 días</span>
+      <span class="ght-badge ght-badge-error" id="badge-urgentes" style="background:#7B1FA2;border-color:#7B1FA2;">0 urgentes</span>
+      <span class="ght-badge ght-badge-secondary" id="badge-total">0 pedidos</span>
+    </div>
+    <button class="ght-btn ght-btn-secondary ght-btn-small" onclick="showExcelModal()">
+      <i class="ght-icons ght-icons-download"></i>
+      <span class="ght-btn-text">Exportar comentarios Excel</span>
+    </button>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- ── PANEL LISTA (Panel 2) ── -->
+    <div class="panel-list">
+      <div class="panel-list-head">
+        <div class="panel-list-head-title">📋 Pedidos Pendientes</div>
+        <div class="ght-textfield-container" style="margin-bottom:6px;">
+          <div class="ght-textfield-wrapper ght-small">
+            <input type="text" class="ght-textfield" placeholder="Buscar OC, artículo, finca…" oninput="filterList(this.value)">
+            <i class="ght-icons ght-icons-search"></i>
+          </div>
+        </div>
+        <div class="filter-row">
+          <button class="filter-chip active" onclick="setFilter('todos',this)">Todos</button>
+          <button class="filter-chip" onclick="setFilter('vencidos',this)">Vencidos</button>
+          <button class="filter-chip" onclick="setFilter('proximos',this)">≤ 6 días</button>
+          <button class="filter-chip" onclick="setFilter('urgentes',this)">Urgentes</button>
+        </div>
+      </div>
+      <div class="oc-scroll" id="oc-list"></div>
     </div>
 
-    <!-- PANEL 1: INDICADOR -->
-    <div class="panel-indicator" id="panel-indicator">
-      <div class="empty-state" style="padding:20px 0; flex:1;">
+    <!-- ── PANEL DERECHO ── -->
+    <div class="panel-right" id="panel-right">
+      <!-- Indicador + detalle + comentario se renderizan aquí -->
+      <div class="empty-center" id="empty-state">
         <div class="empty-icon">📦</div>
-        <p>Selecciona un pedido de la lista para ver el detalle</p>
+        <p style="font-size:13px;">Selecciona un pedido de la lista para ver el detalle</p>
       </div>
     </div>
 
-    <!-- PANELES 3 y 4 -->
-    <div class="panel-right" id="panel-right">
-    </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════
      MODAL EXCEL
-═══════════════════════════════════════════════════════ -->
-<div class="modal-overlay" id="modal-excel">
-  <div class="modal">
-    <h3>📊 Exportar comentarios a Excel</h3>
-    <p style="font-size:13px;color:#555;margin-bottom:12px;">Se generará un archivo con la siguiente información:</p>
-    <table>
-      <thead><tr><th>#</th><th>Columna</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>Proveedor</td></tr>
-        <tr><td>2</td><td>NIT</td></tr>
-        <tr><td>3</td><td>Fuente / Finca</td></tr>
-        <tr><td>4</td><td>N° OC</td></tr>
-        <tr><td>5</td><td>Artículo</td></tr>
-        <tr><td>6</td><td>Comentario Proveedor</td></tr>
-        <tr><td>7</td><td>Fecha Compromiso</td></tr>
-        <tr><td>8</td><td>Fecha Registro Comentario</td></tr>
-      </tbody>
-    </table>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="hideModal()">Cancelar</button>
-      <button class="btn-download" onclick="downloadExcel()">⬇ Descargar Excel</button>
+════════════════════════════════════════ -->
+<div id="GHTModal-excel" class="ght-modal" tabindex="-1">
+  <div class="ght-modal-dialog ght-modal-centered ght-modal-medium">
+    <div class="ght-modal-content">
+      <div class="ght-modal-header">
+        <div class="ght-modal-header-title">
+          <span class="ght-modal-title">📊 Exportar comentarios a Excel</span>
+        </div>
+        <div class="ght-modal-header-buttons">
+          <i class="ght-icons ght-icons-close ght-modal-close"></i>
+        </div>
+      </div>
+      <div class="ght-modal-body">
+        <p style="font-size:13px;color:#555;margin-bottom:12px;">Se generará un archivo <strong>.xlsx</strong> con la siguiente información:</p>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="background:#E8F5E9;">
+              <th style="padding:8px 10px;text-align:left;color:#1B5E20;border-bottom:2px solid #C8E6C9;">#</th>
+              <th style="padding:8px 10px;text-align:left;color:#1B5E20;border-bottom:2px solid #C8E6C9;">Columna</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">1</td><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">Proveedor</td></tr>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">2</td><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">NIT</td></tr>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">3</td><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">Fuente / Finca</td></tr>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">4</td><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">N° OC</td></tr>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">5</td><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">Artículo</td></tr>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">6</td><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">Comentario Proveedor</td></tr>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">7</td><td style="padding:7px 10px;border-bottom:1px solid #f0f0f0;">Fecha Compromiso</td></tr>
+            <tr><td style="padding:7px 10px;">8</td><td style="padding:7px 10px;">Fecha Registro Comentario</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ght-modal-footer">
+        <div class="ght-display-flex ght-width-100 ght-gap-16">
+          <button type="button" class="ght-btn ght-btn-primary ght-btn-small" onclick="downloadExcel()">
+            <i class="ght-icons ght-icons-download"></i>
+            <span class="ght-btn-text">Descargar Excel</span>
+          </button>
+          <button type="button" class="ght-btn ght-btn-secondary ght-btn-small ght-modal-close">
+            <span class="ght-btn-text">Cancelar</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ─── TOAST ──────────────────────────────────────── -->
-<div class="toast" id="toast"></div>
+<!-- GHT Framework JS -->
+<script crossorigin="anonymous"
+        src="https://ghtstoragecdn.blob.core.windows.net/ghtframework/scripts/V4.0/main.js"></script>
 
 <script>
-// ════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // DATOS DE EJEMPLO
-// ════════════════════════════════════════════
+// ═══════════════════════════════════════════
 const OC_DATA = [
-  { id:1, dias:-45, finca:'Finca El Rosal', oc:'OC-12301', articulo:'Fertilizante NPK 50kg', codigo:'FERT-001', fechaPedido:'2026-02-01', fechaEntrega:'2026-03-10', cantPedida:500, cantPend:300, obs:'Pedido prioritario para temporada alta. Verificar disponibilidad inmediata.', urgente:true },
-  { id:2, dias:-31, finca:'Finca La Esperanza', oc:'OC-12315', articulo:'Fungicida Mancozeb 1kg', codigo:'FUNG-012', fechaPedido:'2026-02-15', fechaEntrega:'2026-03-24', cantPedida:200, cantPend:200, obs:'', urgente:false },
-  { id:3, dias:-22, finca:'Finca Los Pinos', oc:'OC-12328', articulo:'Herbicida Glifosato 20L', codigo:'HERB-005', fechaPedido:'2026-02-20', fechaEntrega:'2026-04-02', cantPedida:80, cantPend:80, obs:'Requiere ficha técnica adjunta con el despacho.', urgente:true },
-  { id:4, dias:-18, finca:'Finca Santa Clara', oc:'OC-12340', articulo:'Semilla Tomate Cherry x1000', codigo:'SEM-034', fechaPedido:'2026-03-01', fechaEntrega:'2026-04-06', cantPedida:50, cantPend:30, obs:'', urgente:false },
-  { id:5, dias:-9, finca:'Finca El Paraíso', oc:'OC-12355', articulo:'Insecticida Clorpirifos 1L', codigo:'INS-021', fechaPedido:'2026-03-10', fechaEntrega:'2026-04-15', cantPedida:120, cantPend:120, obs:'Control fitosanitario urgente en lote 3.', urgente:false },
-  { id:6, dias:-3, finca:'Finca Primavera', oc:'OC-12367', articulo:'Abono orgánico compostado 25kg', codigo:'ABON-008', fechaPedido:'2026-03-20', fechaEntrega:'2026-04-21', cantPedida:300, cantPend:150, obs:'', urgente:false },
-  { id:7, dias:2, finca:'Finca El Rosal', oc:'OC-12378', articulo:'Cal agrícola 40kg', codigo:'CAL-003', fechaPedido:'2026-03-25', fechaEntrega:'2026-04-29', cantPedida:600, cantPend:600, obs:'', urgente:false },
-  { id:8, dias:5, finca:'Finca La Esperanza', oc:'OC-12389', articulo:'Fosfato diamónico 50kg', codigo:'FERT-018', fechaPedido:'2026-03-28', fechaEntrega:'2026-05-02', cantPedida:200, cantPend:200, obs:'Coordinar con logística para despacho conjunto.', urgente:false },
-  { id:9, dias:12, finca:'Finca Los Pinos', oc:'OC-12401', articulo:'Manguera goteo 16mm x500m', codigo:'RIE-007', fechaPedido:'2026-04-01', fechaEntrega:'2026-05-09', cantPedida:10, cantPend:10, obs:'', urgente:false },
+  { id:1,  dias:-45, finca:'Finca El Rosal',      oc:'OC-12301', articulo:'Fertilizante NPK 50kg',        codigo:'FERT-001', fechaPedido:'2026-02-01', fechaEntrega:'2026-03-10', cantPedida:500,  cantPend:300,  obs:'Pedido prioritario para temporada alta. Verificar disponibilidad inmediata.', urgente:true  },
+  { id:2,  dias:-31, finca:'Finca La Esperanza',  oc:'OC-12315', articulo:'Fungicida Mancozeb 1kg',       codigo:'FUNG-012', fechaPedido:'2026-02-15', fechaEntrega:'2026-03-24', cantPedida:200,  cantPend:200,  obs:'', urgente:false },
+  { id:3,  dias:-22, finca:'Finca Los Pinos',     oc:'OC-12328', articulo:'Herbicida Glifosato 20L',      codigo:'HERB-005', fechaPedido:'2026-02-20', fechaEntrega:'2026-04-02', cantPedida:80,   cantPend:80,   obs:'Requiere ficha técnica adjunta con el despacho.', urgente:true  },
+  { id:4,  dias:-18, finca:'Finca Santa Clara',   oc:'OC-12340', articulo:'Semilla Tomate Cherry x1000', codigo:'SEM-034',  fechaPedido:'2026-03-01', fechaEntrega:'2026-04-06', cantPedida:50,   cantPend:30,   obs:'', urgente:false },
+  { id:5,  dias:-9,  finca:'Finca El Paraíso',    oc:'OC-12355', articulo:'Insecticida Clorpirifos 1L',  codigo:'INS-021',  fechaPedido:'2026-03-10', fechaEntrega:'2026-04-15', cantPedida:120,  cantPend:120,  obs:'Control fitosanitario urgente en lote 3.', urgente:false },
+  { id:6,  dias:-3,  finca:'Finca Primavera',     oc:'OC-12367', articulo:'Abono orgánico 25kg',         codigo:'ABON-008', fechaPedido:'2026-03-20', fechaEntrega:'2026-04-21', cantPedida:300,  cantPend:150,  obs:'', urgente:false },
+  { id:7,  dias:2,   finca:'Finca El Rosal',      oc:'OC-12378', articulo:'Cal agrícola 40kg',           codigo:'CAL-003',  fechaPedido:'2026-03-25', fechaEntrega:'2026-04-29', cantPedida:600,  cantPend:600,  obs:'', urgente:false },
+  { id:8,  dias:5,   finca:'Finca La Esperanza',  oc:'OC-12389', articulo:'Fosfato diamónico 50kg',      codigo:'FERT-018', fechaPedido:'2026-03-28', fechaEntrega:'2026-05-02', cantPedida:200,  cantPend:200,  obs:'Coordinar con logística para despacho conjunto.', urgente:false },
+  { id:9,  dias:12,  finca:'Finca Los Pinos',     oc:'OC-12401', articulo:'Manguera goteo 16mm x500m',   codigo:'RIE-007',  fechaPedido:'2026-04-01', fechaEntrega:'2026-05-09', cantPedida:10,   cantPend:10,   obs:'', urgente:false },
 ];
 
-const comentariosGuardados = {};
-let selectedId = null;
+const guardados = {};
+let selectedId  = null;
 let activeFilter = 'todos';
-let searchTerm = '';
+let searchTerm   = '';
+let ghtToast, excelModal;
 
-// ════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// INIT FRAMEWORK
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  initGHTFramework({
+    language: 'es', tooltip: true, textarea: true,
+    dropdown: true, collapsible: false, tabs: false,
+    accessibility: true, inputNumber: false,
+    cards: true, resize: false, mutation: true
+  });
+  ghtToast = new GHTToast();
+  excelModal = new GHTModal({
+    selector: '#GHTModal-excel',
+    isDraggable: true, keyboard: true, outsideClick: true
+  });
+});
+
+// ═══════════════════════════════════════════
 // NAVEGACIÓN
-// ════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function goToInstructivo() {
   document.getElementById('page-login').classList.remove('active');
   document.getElementById('global-header').style.display = 'block';
@@ -609,239 +487,250 @@ function goToMain() {
   document.getElementById('page-instructivo').classList.remove('active');
   document.getElementById('page-main').classList.add('active');
   renderList();
-  updateCounters();
+  updateBadges();
 }
 function logout() {
-  document.getElementById('page-main').classList.remove('active');
-  document.getElementById('page-instructivo').classList.remove('active');
+  ['page-main','page-instructivo'].forEach(id => document.getElementById(id).classList.remove('active'));
   document.getElementById('global-header').style.display = 'none';
   document.getElementById('page-login').classList.add('active');
   selectedId = null;
 }
 
-// ════════════════════════════════════════════
-// LISTA DE OC
-// ════════════════════════════════════════════
-function getDaysClass(dias) {
-  if (dias < 0) return 'days-red';
-  if (dias <= 6) return 'days-orange';
-  return 'days-green';
-}
-function getIndClass(dias) {
-  if (dias < 0) return 'ind-red';
-  if (dias <= 6) return 'ind-orange';
-  return 'ind-green';
-}
+// ═══════════════════════════════════════════
+// LISTA OC
+// ═══════════════════════════════════════════
+function diasClass(d)  { return d < 0 ? 'dias-red' : d <= 6 ? 'dias-orange' : 'dias-green'; }
+function indClass(d)   { return d < 0 ? 'ind-red'  : d <= 6 ? 'ind-orange'  : 'ind-green';  }
+function diasLabel(d)  { return d < 0 ? `${d}d` : `+${d}d`; }
+function indLabel(d)   { return d < 0 ? `${d}` : `+${d}`; }
 
-function filteredData() {
-  return OC_DATA.filter(oc => {
-    const matchFilter =
-      activeFilter === 'todos' ? true :
-      activeFilter === 'vencidos' ? oc.dias < 0 :
-      activeFilter === 'proximos' ? (oc.dias >= 0 && oc.dias <= 6) :
-      activeFilter === 'urgentes' ? oc.urgente : true;
+function filtered() {
+  return OC_DATA.filter(o => {
+    const ok =
+      activeFilter === 'todos'    ? true :
+      activeFilter === 'vencidos' ? o.dias < 0 :
+      activeFilter === 'proximos' ? (o.dias >= 0 && o.dias <= 6) :
+      activeFilter === 'urgentes' ? o.urgente : true;
     const q = searchTerm.toLowerCase();
-    const matchSearch = !q ||
-      oc.oc.toLowerCase().includes(q) ||
-      oc.articulo.toLowerCase().includes(q) ||
-      oc.finca.toLowerCase().includes(q);
-    return matchFilter && matchSearch;
-  });
+    return ok && (!q || o.oc.toLowerCase().includes(q) ||
+                        o.articulo.toLowerCase().includes(q) ||
+                        o.finca.toLowerCase().includes(q));
+  }).sort((a,b) => a.dias - b.dias);
 }
 
 function renderList() {
-  const list = document.getElementById('oc-list');
-  const data = filteredData().sort((a,b) => a.dias - b.dias);
+  const data = filtered();
+  const el = document.getElementById('oc-list');
   if (!data.length) {
-    list.innerHTML = '<div class="empty-state" style="padding:40px 20px;"><div class="empty-icon">🔍</div><p>Sin resultados</p></div>';
+    el.innerHTML = '<div class="empty-center"><div class="empty-icon">🔍</div><p>Sin resultados</p></div>';
     return;
   }
-  list.innerHTML = data.map(oc => {
-    const dc = getDaysClass(oc.dias);
-    const label = oc.dias < 0 ? `${oc.dias}d` : `+${oc.dias}d`;
-    const comentado = comentariosGuardados[oc.id];
+  el.innerHTML = data.map(o => {
+    const saved = guardados[o.id];
     return `
-    <div class="oc-item ${selectedId===oc.id?'selected':''}" onclick="selectOC(${oc.id})">
-      <div class="oc-days ${dc}">${label}<small>días</small></div>
+    <div class="oc-item ${selectedId===o.id?'selected':''}" onclick="selectOC(${o.id})">
+      <div class="oc-dias-box ${diasClass(o.dias)}">${diasLabel(o.dias)}<small>días</small></div>
       <div class="oc-info">
-        <div class="oc-finca">${oc.finca}</div>
-        <div class="oc-num">${oc.oc}</div>
-        <div class="oc-art">${oc.articulo}</div>
-        <div>
-          ${oc.urgente ? '<span class="badge-urgente">URGENTE</span>' : ''}
-          ${comentado ? '<span class="badge-comentado">✓ Comentado</span>' : ''}
+        <div class="oc-finca">${o.finca}</div>
+        <div class="oc-num">${o.oc}</div>
+        <div class="oc-art">${o.articulo}</div>
+        <div class="oc-tags">
+          ${o.urgente ? '<span class="ght-badge ght-badge-error" style="font-size:9px;padding:1px 6px;">⚡ URGENTE</span>' : ''}
+          ${saved ? '<span class="ght-badge ght-badge-success" style="font-size:9px;padding:1px 6px;">✓ Comentado</span>' : ''}
         </div>
       </div>
     </div>`;
   }).join('');
 }
 
-function updateCounters() {
-  document.getElementById('count-vencidos').textContent = OC_DATA.filter(o=>o.dias<0).length;
-  document.getElementById('count-proximos').textContent = OC_DATA.filter(o=>o.dias>=0&&o.dias<=6).length;
-  document.getElementById('count-urgentes').textContent = OC_DATA.filter(o=>o.urgente).length;
-  document.getElementById('count-total').textContent = OC_DATA.length;
-}
-
-function filterList(val) {
-  searchTerm = val;
-  renderList();
-}
-
+function filterList(val) { searchTerm = val; renderList(); }
 function setFilter(f, btn) {
   activeFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderList();
 }
 
-// ════════════════════════════════════════════
-// SELECCIÓN DE OC
-// ════════════════════════════════════════════
+function updateBadges() {
+  document.getElementById('badge-vencidos').textContent  = OC_DATA.filter(o=>o.dias<0).length + ' vencidos';
+  document.getElementById('badge-proximos').textContent  = OC_DATA.filter(o=>o.dias>=0&&o.dias<=6).length + ' próximos ≤6 días';
+  document.getElementById('badge-urgentes').textContent  = OC_DATA.filter(o=>o.urgente).length + ' urgentes';
+  document.getElementById('badge-total').textContent     = OC_DATA.length + ' pedidos';
+}
+
+// ═══════════════════════════════════════════
+// SELECCIÓN OC
+// ═══════════════════════════════════════════
 function selectOC(id) {
   selectedId = id;
-  const oc = OC_DATA.find(o=>o.id===id);
+  const o = OC_DATA.find(x => x.id === id);
   renderList();
-  renderIndicator(oc);
-  renderDetail(oc);
+  renderRight(o);
 }
 
-function renderIndicator(oc) {
-  const ic = getIndClass(oc.dias);
-  const label = oc.dias < 0 ? `${oc.dias}` : `+${oc.dias}`;
-  document.getElementById('panel-indicator').innerHTML = `
-    <div class="indicator-box ${ic}">
-      <div class="ind-num">${label}</div>
-      <div class="ind-label">días vs<br>fecha OC</div>
-    </div>
-    <div class="indicator-meta">
-      <h3>${oc.oc} — ${oc.finca}</h3>
-      <p>${oc.articulo}</p>
-      <p style="margin-top:4px; color:#888; font-size:11px;">Fecha de entrega comprometida: <strong>${oc.fechaEntrega}</strong></p>
-      ${oc.urgente ? '<span class="tag-urgente">⚡ URGENTE</span>' : ''}
-    </div>`;
-}
+function renderRight(o) {
+  const saved = guardados[o.id] || {};
+  const ic    = indClass(o.dias);
 
-function renderDetail(oc) {
-  const saved = comentariosGuardados[oc.id] || {};
   document.getElementById('panel-right').innerHTML = `
-    <div class="panel-card">
-      <div class="panel-card-header">
-        <div class="dot-panel" style="background:#1565C0;"></div>
-        Panel 3 — Detalle del pedido (solo lectura)
+
+    <!-- PANEL 1 – Indicador -->
+    <div class="indicator-row">
+      <div class="ind-box ${ic}">
+        <div class="ind-num">${indLabel(o.dias)}</div>
+        <div class="ind-label">días vs<br>fecha OC</div>
       </div>
-      <div class="panel-card-body">
-        <div class="detail-grid">
-          <div class="detail-field"><label>Fuente / Finca</label><span>${oc.finca}</span></div>
-          <div class="detail-field"><label>Documento OC</label><span style="font-weight:700;color:#1B5E20;">${oc.oc}</span></div>
-          <div class="detail-field"><label>Código artículo</label><span>${oc.codigo}</span></div>
-          <div class="detail-field"><label>Descripción</label><span>${oc.articulo}</span></div>
-          <div class="detail-field"><label>Fecha de pedido</label><span>${oc.fechaPedido}</span></div>
-          <div class="detail-field"><label>Fecha de entrega OC</label><span style="color:${oc.dias<0?'#C62828':'#1B5E20'};font-weight:600;">${oc.fechaEntrega}</span></div>
-          <div class="detail-field"><label>Cantidad pedida</label><span>${oc.cantPedida.toLocaleString()} und.</span></div>
-          <div class="detail-field"><label>Cantidad pendiente</label><span style="font-weight:700;">${oc.cantPend.toLocaleString()} und.</span></div>
-          ${oc.obs ? `<div class="detail-field full"><label>Observaciones del área de compras</label><div class="detail-obs">${oc.obs}</div></div>` : ''}
+      <div class="ind-meta" style="flex:1;">
+        <h3>${o.oc} — ${o.finca}</h3>
+        <p>${o.articulo}</p>
+        <p style="font-size:11px;color:#999;margin-top:4px;">Fecha entrega comprometida: <strong>${o.fechaEntrega}</strong></p>
+        ${o.urgente ? '<span class="ght-badge ght-badge-error" style="margin-top:6px;display:inline-block;">⚡ PEDIDO URGENTE</span>' : ''}
+      </div>
+    </div>
+
+    <!-- PANEL 3 – Detalle -->
+    <div class="detail-panel">
+      <div class="ght-card">
+        <div class="ght-card-header" style="padding:10px 16px;">
+          <span class="panel-card-title">
+            <span class="panel-dot" style="background:#1565C0;"></span>
+            Panel 3 — Detalle del pedido
+            <span class="ght-badge ght-badge-secondary" style="font-size:10px;margin-left:4px;">Solo lectura</span>
+          </span>
+        </div>
+        <div class="ght-card-body">
+          <div class="detail-grid">
+            <div class="detail-field"><label>Fuente / Finca</label><span>${o.finca}</span></div>
+            <div class="detail-field"><label>Documento OC</label><span style="font-weight:700;color:#1B5E20;">${o.oc}</span></div>
+            <div class="detail-field"><label>Código artículo</label><span>${o.codigo}</span></div>
+            <div class="detail-field"><label>Descripción</label><span>${o.articulo}</span></div>
+            <div class="detail-field"><label>Fecha de pedido</label><span>${o.fechaPedido}</span></div>
+            <div class="detail-field"><label>Fecha de entrega OC</label><span style="color:${o.dias<0?'#C62828':'#2E7D32'};font-weight:600;">${o.fechaEntrega}</span></div>
+            <div class="detail-field"><label>Cantidad pedida</label><span>${o.cantPedida.toLocaleString()} und.</span></div>
+            <div class="detail-field"><label>Cantidad pendiente</label><span style="font-weight:700;">${o.cantPend.toLocaleString()} und.</span></div>
+            ${o.obs ? `<div class="detail-field full"><label>Observaciones del área de compras</label><div class="obs-box">${o.obs}</div></div>` : ''}
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="panel-card">
-      <div class="panel-card-header">
-        <div class="dot-panel" style="background:#7B1FA2;"></div>
-        Panel 4 — Comentario del proveedor
-        ${saved.texto ? '<span style="margin-left:auto;font-size:11px;font-weight:400;color:#2E7D32;">✓ Guardado el '+saved.fecha+'</span>' : ''}
-      </div>
-      <div class="panel-card-body">
-        <div class="form-row">
-          <label>Comentario <span class="req">*</span></label>
-          <textarea id="txt-comentario" placeholder="Describe el estado del pedido, motivo de atraso, novedades logísticas o de producción…">${saved.texto||''}</textarea>
+    <!-- PANEL 4 – Comentario -->
+    <div class="detail-panel">
+      <div class="ght-card">
+        <div class="ght-card-header" style="padding:10px 16px;">
+          <span class="panel-card-title">
+            <span class="panel-dot" style="background:#7B1FA2;"></span>
+            Panel 4 — Comentario del proveedor
+            ${saved.texto ? `<span class="saved-tag">✓ Guardado el ${saved.fecha}</span>` : ''}
+          </span>
         </div>
-        <div class="form-two-col">
-          <div class="form-row">
-            <label>Fecha compromiso de entrega</label>
-            <input type="date" id="inp-fecha" value="${saved.fechaCompromiso||''}">
+        <div class="ght-card-body">
+
+          <div class="ght-textarea-wrapper ght-mb-16">
+            <label class="ght-textarea-label">Comentario <span style="color:#C62828;">*</span></label>
+            <textarea maxlength="600" class="ght-textarea" id="txt-comentario"
+              placeholder="Describe el estado del pedido, motivos de atraso, novedades logísticas o de producción…">${saved.texto||''}</textarea>
+            <div class="ght-display-flex ght-justify-between">
+              <span class="ght-info-text">Mín. 10 caracteres. Información visible para el equipo de compras.</span>
+              <label class="ght-textarea-counter">0/600</label>
+            </div>
           </div>
-          <div class="form-row">
-            <label>N° Guía / Remisión</label>
-            <input type="text" id="inp-guia" placeholder="Ej: 00123456" value="${saved.guia||''}">
+
+          <div class="ght-row ght-gap-16 ght-mb-16">
+            <div class="ght-col ght-col-md-6">
+              <div class="ght-date-wrapper">
+                <label class="ght-date-label">Fecha compromiso de entrega</label>
+                <input type="date" class="ght-date" id="inp-fecha" value="${saved.fechaCompromiso||''}">
+                <span class="ght-info-text">Opcional — nueva fecha estimada de despacho</span>
+              </div>
+            </div>
+            <div class="ght-col ght-col-md-6">
+              <div class="ght-textfield-container">
+                <label class="ght-textfield-label">N° Guía / Remisión</label>
+                <div class="ght-textfield-wrapper ght-medium">
+                  <input type="text" class="ght-textfield" id="inp-guia"
+                    placeholder="Ej: 00123456" value="${saved.guia||''}">
+                  <i class="ght-icons ght-icons-barcode"></i>
+                </div>
+                <span class="ght-info-text">Opcional</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="form-row">
-          <label>Adjuntar documentos (PDF, PNG, JPG, Excel · máx. 10 MB)</label>
-          <div class="upload-area" onclick="document.getElementById('file-input').click()">
-            <div class="upload-icon">📎</div>
-            <div>Haz clic aquí para adjuntar un archivo</div>
-            <div style="font-size:11px;margin-top:4px;">Facturas, guías, remisiones, fotos, certificados</div>
+
+          <div class="ght-input-file-wrapper ght-mb-16">
+            <label class="ght-input-file-label">Adjuntar documentos (PDF, PNG, JPG, Excel · máx. 10 MB)</label>
+            <input type="file" class="ght-input-file" id="file-input" multiple
+              accept=".pdf,.png,.jpg,.jpeg,.xlsx,.docx" onchange="addFiles(this)">
+            <span class="ght-info-text">Facturas, guías, remisiones, fotos, certificados de calidad</span>
+            <div class="file-list-items" id="file-list">
+              ${(saved.archivos||[]).map(f=>`
+                <div class="file-item">
+                  <i class="ght-icons ght-icons-file"></i>
+                  <span>${f}</span>
+                  <span class="file-remove" onclick="this.parentElement.remove()">✕</span>
+                </div>`).join('')}
+            </div>
           </div>
-          <input type="file" id="file-input" style="display:none" multiple accept=".pdf,.png,.jpg,.jpeg,.xlsx,.docx" onchange="addFiles(this)">
-          <div class="file-list" id="file-list">
-            ${(saved.archivos||[]).map(f=>`
-              <div class="file-item">
-                <span>📄 ${f}</span>
-                <span class="file-remove" onclick="removeFile(this,'${f}')">✕</span>
-              </div>`).join('')}
+
+          <div class="ght-display-flex ght-justify-between ght-align-items-center">
+            <span class="ght-info-text" style="color:#E65100;">⚠️ Debes presionar Guardar para que el comentario quede registrado</span>
+            <button class="ght-btn ght-btn-primary ght-btn-medium" onclick="guardar(${o.id})">
+              <i class="ght-icons ght-icons-save"></i>
+              <span class="ght-btn-text">Guardar</span>
+            </button>
           </div>
-        </div>
-        <div class="form-footer">
-          <span class="save-note">⚠️ Debes presionar Guardar para registrar tu comentario</span>
-          <button class="btn-save" onclick="guardarComentario(${oc.id})">💾 Guardar</button>
+
         </div>
       </div>
     </div>`;
+
+  initGHTFramework({ textarea: true });
 }
 
+// ═══════════════════════════════════════════
+// GUARDAR COMENTARIO
+// ═══════════════════════════════════════════
 function addFiles(input) {
   const list = document.getElementById('file-list');
   Array.from(input.files).forEach(f => {
-    const item = document.createElement('div');
-    item.className = 'file-item';
-    item.innerHTML = `<span>📄 ${f.name}</span><span class="file-remove" onclick="this.parentElement.remove()">✕</span>`;
-    list.appendChild(item);
+    const div = document.createElement('div');
+    div.className = 'file-item';
+    div.innerHTML = `<i class="ght-icons ght-icons-file"></i><span>${f.name}</span><span class="file-remove" onclick="this.parentElement.remove()">✕</span>`;
+    list.appendChild(div);
   });
   input.value = '';
 }
 
-function removeFile(el) { el.parentElement.remove(); }
-
-function guardarComentario(id) {
+function guardar(id) {
   const texto = document.getElementById('txt-comentario').value.trim();
   if (!texto || texto.length < 10) {
-    showToast('⚠️ El comentario debe tener al menos 10 caracteres.', '#E65100');
+    ghtToast.showToast({ type:'warning', message:'El comentario debe tener al menos 10 caracteres.', position:'ght-top-right', duration:3500 });
     return;
   }
-  const fecha = document.getElementById('inp-fecha').value;
-  const guia = document.getElementById('inp-guia').value;
-  const archivos = Array.from(document.querySelectorAll('#file-list .file-item span:first-child'))
-    .map(s => s.textContent.replace('📄 ',''));
-  const ahora = new Date().toLocaleString('es-CO', {dateStyle:'short', timeStyle:'short'});
+  const fecha    = document.getElementById('inp-fecha').value;
+  const guia     = document.getElementById('inp-guia').value;
+  const archivos = Array.from(document.querySelectorAll('#file-list .file-item span:first-of-type')).map(s=>s.textContent);
+  const ahora    = new Date().toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'});
 
-  comentariosGuardados[id] = { texto, fechaCompromiso: fecha, guia, archivos, fecha: ahora };
+  guardados[id] = { texto, fechaCompromiso: fecha, guia, archivos, fecha: ahora };
 
-  showToast('✅ Comentario guardado. El comprador asignado fue notificado por correo.', '#1B5E20');
+  ghtToast.showToast({
+    type: 'success',
+    message: '✅ Comentario guardado. El comprador asignado fue notificado por correo.',
+    position: 'ght-top-right',
+    duration: 4000
+  });
   renderList();
-  const oc = OC_DATA.find(o=>o.id===id);
-  renderDetail(oc);
+  renderRight(OC_DATA.find(o=>o.id===id));
 }
 
-// ════════════════════════════════════════════
-// TOAST
-// ════════════════════════════════════════════
-function showToast(msg, color = '#1B5E20') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = color;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4000);
-}
-
-// ════════════════════════════════════════════
-// MODAL EXCEL
-// ════════════════════════════════════════════
-function showModal() { document.getElementById('modal-excel').classList.add('show'); }
-function hideModal() { document.getElementById('modal-excel').classList.remove('show'); }
+// ═══════════════════════════════════════════
+// EXCEL MODAL
+// ═══════════════════════════════════════════
+function showExcelModal() { excelModal.show(); }
 function downloadExcel() {
-  hideModal();
-  showToast('📊 Archivo Excel generado y descargado correctamente.');
+  excelModal.hide();
+  ghtToast.showToast({ type:'success', message:'📊 Archivo Excel generado y descargado correctamente.', position:'ght-top-right', duration:3500 });
 }
 </script>
 </body>
