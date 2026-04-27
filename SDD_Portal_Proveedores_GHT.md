@@ -1,6 +1,6 @@
 # SDD — Portal de Proveedores GHT
 **Spec Driven Development**
-**Versión:** 1.0
+**Versión:** 2.0
 **Fecha:** 2026-04-27
 **Proyecto:** Control Pendientes de Entrega – Proveedores SAC
 **Empresa:** GHT – Growers Hub Trading
@@ -93,48 +93,59 @@ El portal es una aplicación web independiente que se conecta a SAG mediante API
 ### 3.1 Diagrama de arquitectura
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                        FRONTEND                         │
-│              Next.js (React) + Tailwind CSS             │
-│         Desplegado en servidor GHT / Vercel             │
-└──────────────────────┬──────────────────────────────────┘
-                       │ HTTPS
-┌──────────────────────▼──────────────────────────────────┐
-│                      BACKEND                            │
-│                  Next.js API Routes                     │
-│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐  │
-│  │  Auth (AD)  │  │  OC Service  │  │Comment Service│  │
-│  │  NextAuth   │  │  SAG Adapter │  │  + Adjuntos   │  │
-│  └─────────────┘  └──────────────┘  └───────────────┘  │
-│  ┌─────────────┐  ┌──────────────┐                      │
-│  │Email Service│  │Excel Export  │                      │
-│  │  Nodemailer │  │   ExcelJS    │                      │
-│  └─────────────┘  └──────────────┘                      │
-└──────────┬──────────────────┬───────────────────────────┘
-           │                  │
-┌──────────▼──────┐  ┌────────▼────────────────────────┐
-│  Base de datos  │  │          SAG API                 │
-│  PostgreSQL     │  │  GET /api/oc/pendientes          │
-│  (portal)       │  │  (autenticación interna GHT)     │
-└─────────────────┘  └─────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                    AZURE ACTIVE DIRECTORY                    │
+│            Autenticación SSO (OAuth 2.0 / OIDC)             │
+└───────────────────────────┬──────────────────────────────────┘
+                            │ Token
+          ┌─────────────────┼──────────────────┐
+          ▼                 ▼                  ▼
+┌──────────────────┐ ┌──────────────┐ ┌────────────────────┐
+│  FRONTEND        │ │  BACKEND     │ │  SAG API           │
+│  React (TypeScript)  │ │  ASP.NET Core│ │  GET /oc/pendientes│
+│  Azure App Service   │ │  Web API     │ │  (sistema interno) │
+│  (Static Web App)│ │  App Service /│ │                    │
+└────────┬─────────┘ │  Container App│ └─────────┬──────────┘
+         │ HTTPS     └──────┬───────┘           │
+         └──────────────────┘         ┌──────────┘
+                            │         │ (sync c/15 min)
+               ┌────────────▼─────────▼──────────────────────┐
+               │              AZURE DATA LAYER                │
+               │  ┌──────────────────┐  ┌──────────────────┐ │
+               │  │  Azure SQL DB    │  │  Azure Blob       │ │
+               │  │  (comentarios,   │  │  Storage          │ │
+               │  │   proveedores,   │  │  (adjuntos:       │ │
+               │  │   caché OC)      │  │   PDF, IMG, Excel)│ │
+               │  └──────────────────┘  └──────────────────┘ │
+               └─────────────────────────────────────────────┘
+                            │
+               ┌────────────▼────────────────────┐
+               │  Azure Communication Services   │
+               │  Notificación email al comprador │
+               └─────────────────────────────────┘
 ```
 
 ### 3.2 Componentes y responsabilidades
-| Componente | Responsabilidad |
-|-----------|----------------|
-| **Next.js Frontend** | Renderizado de pantallas, navegación entre paneles |
-| **NextAuth + AD** | Autenticación SSO con Directorio Activo vía LDAP/OAuth |
-| **SAG Adapter** | Consulta periódica a SAG API y caché local de OC |
-| **Comment Service** | CRUD de comentarios, fechas compromiso y adjuntos |
-| **Email Service** | Envío de notificación al comprador vía SMTP corporativo |
-| **Excel Export** | Generación de archivo .xlsx con comentarios |
-| **PostgreSQL** | Almacenamiento de comentarios, adjuntos y maestro de proveedores |
+| Componente | Tecnología | Responsabilidad |
+|-----------|-----------|----------------|
+| **Frontend SPA** | React 18 + TypeScript | Renderizado de pantallas, navegación entre paneles, llamadas a API |
+| **Backend API** | ASP.NET Core 8 Web API | Lógica de negocio, autenticación, integración SAG, exportación Excel |
+| **Auth Service** | Azure AD + Microsoft.Identity.Web | SSO con Directorio Activo corporativo (OAuth 2.0 / OIDC) |
+| **SAG Adapter** | Servicio C# + HttpClient | Consulta periódica a SAG API y caché local en Azure SQL |
+| **Comment Service** | C# + EF Core | CRUD de comentarios, fechas compromiso y referencia a adjuntos |
+| **Storage Service** | Azure Blob Storage SDK | Upload, descarga y eliminación de adjuntos |
+| **Email Service** | Azure Communication Services | Notificación al comprador al guardar un comentario |
+| **Excel Export** | ClosedXML (C#) | Generación de archivo .xlsx con comentarios |
+| **Base de datos** | Azure SQL Database | Proveedores, caché de OC, comentarios y metadata de adjuntos |
+| **Archivos adjuntos** | Azure Blob Storage | Almacenamiento de documentos subidos por el proveedor |
 
 ### 3.3 Patrones de diseño
-- **Adapter:** para aislar la lógica de consumo de SAG API del resto del sistema
-- **Repository:** para acceso a datos en PostgreSQL
-- **Observer:** para disparar notificaciones al guardar un comentario
-- **Cache-aside:** OC leídas de SAG se cachean en BD local para performance y disponibilidad offline de SAG
+- **Clean Architecture:** separación en capas — Domain, Application, Infrastructure, API
+- **Repository + Unit of Work:** acceso a datos con Entity Framework Core sobre Azure SQL
+- **Adapter:** para aislar la integración con SAG API del resto del sistema
+- **Mediator (MediatR):** desacoplamiento de comandos y queries (CQRS)
+- **Observer:** publicación de evento `ComentarioGuardado` que dispara notificación email
+- **Cache-aside:** OC leídas de SAG se cachean en Azure SQL para disponibilidad ante caídas de SAG
 
 ---
 
@@ -318,63 +329,68 @@ El portal es una aplicación web independiente que se conecta a SAG mediante API
 
 ## 6. Diseño de Datos
 
-### 6.1 Modelo de datos del portal (PostgreSQL)
+### 6.1 Modelo de datos del portal (Azure SQL Database)
 
 ```sql
 -- Maestro de proveedores (cargado desde Excel inicial)
-CREATE TABLE proveedores (
-  id            SERIAL PRIMARY KEY,
-  nit           VARCHAR(20) UNIQUE NOT NULL,
-  nombre        VARCHAR(200) NOT NULL,
-  email_sac     VARCHAR(100) NOT NULL,   -- usuario AD asignado
-  comprador_email VARCHAR(100) NOT NULL, -- comprador interno asignado
-  activo        BOOLEAN DEFAULT TRUE,
-  created_at    TIMESTAMP DEFAULT NOW()
+CREATE TABLE Proveedores (
+  Id              INT           IDENTITY(1,1) PRIMARY KEY,
+  Nit             VARCHAR(20)   NOT NULL UNIQUE,
+  Nombre          VARCHAR(200)  NOT NULL,
+  EmailSac        VARCHAR(100)  NOT NULL,   -- usuario AD asignado (contacto SAC)
+  CompradorEmail  VARCHAR(100)  NOT NULL,   -- comprador interno asignado
+  Activo          BIT           NOT NULL DEFAULT 1,
+  CreatedAt       DATETIME2     NOT NULL DEFAULT GETUTCDATE()
 );
 
--- Caché de OC sincronizadas desde SAG
-CREATE TABLE ordenes_compra (
-  id            SERIAL PRIMARY KEY,
-  numero_oc     VARCHAR(20) NOT NULL,
-  proveedor_nit VARCHAR(20) REFERENCES proveedores(nit),
-  fuente_finca  VARCHAR(100),
-  codigo_art    VARCHAR(50),
-  descripcion   TEXT,
-  fecha_pedido  DATE,
-  fecha_entrega DATE,
-  cantidad_pedida DECIMAL(10,2),
-  cantidad_pend   DECIMAL(10,2),
-  obs_compras   TEXT,
-  urgente       BOOLEAN DEFAULT FALSE,
-  dias_diff     INTEGER,               -- calculado: fecha_entrega - hoy
-  sincronizado_en TIMESTAMP DEFAULT NOW(),
-  UNIQUE(numero_oc, codigo_art)
+-- Caché de OC sincronizadas desde SAG (se refresca cada 15 min)
+CREATE TABLE OrdenesCompra (
+  Id              INT           IDENTITY(1,1) PRIMARY KEY,
+  NumeroOc        VARCHAR(20)   NOT NULL,
+  ProveedorNit    VARCHAR(20)   NOT NULL REFERENCES Proveedores(Nit),
+  FuenteFinca     VARCHAR(100)  NULL,
+  CodigoArt       VARCHAR(50)   NULL,
+  Descripcion     NVARCHAR(MAX) NULL,
+  FechaPedido     DATE          NULL,
+  FechaEntrega    DATE          NULL,
+  CantidadPedida  DECIMAL(10,2) NULL,
+  CantidadPend    DECIMAL(10,2) NULL,
+  ObsCompras      NVARCHAR(MAX) NULL,
+  Urgente         BIT           NOT NULL DEFAULT 0,
+  DiasVencimiento AS DATEDIFF(DAY, GETUTCDATE(), FechaEntrega) PERSISTED,
+  SincronizadoEn  DATETIME2     NOT NULL DEFAULT GETUTCDATE(),
+  CONSTRAINT UQ_OC_Art UNIQUE (NumeroOc, CodigoArt)
 );
 
--- Comentarios del proveedor
-CREATE TABLE comentarios (
-  id              SERIAL PRIMARY KEY,
-  orden_compra_id INTEGER REFERENCES ordenes_compra(id),
-  proveedor_nit   VARCHAR(20) REFERENCES proveedores(nit),
-  texto           TEXT NOT NULL,
-  fecha_compromiso DATE,
-  numero_guia     VARCHAR(100),
-  notificado      BOOLEAN DEFAULT FALSE,
-  created_at      TIMESTAMP DEFAULT NOW(),
-  updated_at      TIMESTAMP DEFAULT NOW()
+-- Comentarios registrados por el proveedor
+CREATE TABLE Comentarios (
+  Id              INT           IDENTITY(1,1) PRIMARY KEY,
+  OrdenCompraId   INT           NOT NULL REFERENCES OrdenesCompra(Id),
+  ProveedorNit    VARCHAR(20)   NOT NULL REFERENCES Proveedores(Nit),
+  Texto           NVARCHAR(MAX) NOT NULL,
+  FechaCompromiso DATE          NULL,
+  NumeroGuia      VARCHAR(100)  NULL,
+  Notificado      BIT           NOT NULL DEFAULT 0,
+  CreatedAt       DATETIME2     NOT NULL DEFAULT GETUTCDATE(),
+  UpdatedAt       DATETIME2     NOT NULL DEFAULT GETUTCDATE()
 );
 
--- Adjuntos vinculados a comentarios
-CREATE TABLE adjuntos (
-  id            SERIAL PRIMARY KEY,
-  comentario_id INTEGER REFERENCES comentarios(id),
-  nombre_archivo VARCHAR(255),
-  tipo_mime     VARCHAR(100),
-  tamaño_bytes  INTEGER,
-  ruta_storage  VARCHAR(500),          -- path en servidor o URL en object storage
-  created_at    TIMESTAMP DEFAULT NOW()
+-- Metadata de adjuntos (el archivo físico vive en Azure Blob Storage)
+CREATE TABLE Adjuntos (
+  Id              INT           IDENTITY(1,1) PRIMARY KEY,
+  ComentarioId    INT           NOT NULL REFERENCES Comentarios(Id),
+  NombreArchivo   VARCHAR(255)  NOT NULL,
+  TipoMime        VARCHAR(100)  NOT NULL,
+  TamanioBytes    INT           NOT NULL,
+  BlobUri         VARCHAR(500)  NOT NULL,  -- URI en Azure Blob Storage
+  CreatedAt       DATETIME2     NOT NULL DEFAULT GETUTCDATE()
 );
 ```
+
+**Notas de infraestructura de datos:**
+- **Azure SQL Database:** tier Standard S2 (mínimo), escalable según crecimiento
+- **Azure Blob Storage:** container privado `adjuntos-oc`, acceso mediante SAS tokens de corta duración generados por el backend
+- **Entity Framework Core 8** como ORM con migraciones versionadas en el repositorio
 
 ### 6.2 Contrato de la API SAG
 
@@ -460,12 +476,14 @@ Ingresa al portal para ver el detalle completo.
 ### 7.3 Seguridad
 | Riesgo | Mitigación |
 |--------|-----------|
-| Acceso entre proveedores | Filtro por NIT del usuario autenticado en cada consulta |
-| XSS | Sanitización de texto en comentarios (DOMPurify o equivalente) |
-| File upload malicioso | Validación de tipo MIME + extensión + tamaño en servidor |
-| Sesión | Token JWT con expiración 8 horas (jornada laboral) |
-| HTTPS | Obligatorio en producción (certificado TLS) |
-| Exposición de datos financieros | El campo de valor monetario de OC nunca se consulta ni expone |
+| Acceso entre proveedores | Claim de NIT extraído del token Azure AD; filtro obligatorio en cada query de EF Core |
+| XSS | Sanitización en frontend (React escapa por defecto); validación adicional en API |
+| File upload malicioso | Validación de tipo MIME + extensión + tamaño en ASP.NET Core antes del upload a Blob |
+| Sesión | JWT emitido por Azure AD con expiración 8 horas; refresh token automático |
+| HTTPS | Forzado en Azure App Service / Container Apps (TLS 1.2+) |
+| Secretos | Cadenas de conexión y tokens almacenados en Azure Key Vault; nunca en código o config |
+| Acceso a Blob Storage | SAS tokens de corta duración (15 min) generados por el backend; container privado |
+| Exposición de datos financieros | El campo de valor monetario de OC nunca se consulta ni expone al proveedor |
 
 ### 7.4 Compatibilidad de navegadores
 - Chrome ≥ 100 (prioridad)
@@ -491,19 +509,20 @@ Ingresa al portal para ver el detalle completo.
 
 | Tarea | Prioridad |
 |-------|-----------|
-| Setup proyecto Next.js + Tailwind + PostgreSQL | Alta |
-| Autenticación con Directorio Activo (NextAuth LDAP) | Alta |
+| Setup solución ASP.NET Core 8 Web API + React 18 TS | Alta |
+| Configurar Azure AD (registro de app, scopes, roles) | Alta |
+| Provisionar Azure SQL Database + migraciones EF Core | Alta |
 | Carga del maestro de proveedores desde Excel | Alta |
-| Integración con SAG API (lectura de OC) | Alta |
-| Pantalla Instructivo (Hoja 1) | Alta |
-| Panel Principal 4 paneles (Hoja 2) | Alta |
-| Guardado de comentarios y fecha compromiso | Alta |
-| Envío de notificación por correo al comprador | Alta |
+| Integración con SAG API (HttpClient + SAG Adapter) | Alta |
+| Pantalla Instructivo / Bienvenida (Hoja 1) | Alta |
+| Panel Principal 4 paneles (Hoja 2) — React components | Alta |
+| Endpoint POST comentarios + guardado en Azure SQL | Alta |
+| Notificación email con Azure Communication Services | Alta |
+| Despliegue en Azure App Service (entorno de pruebas) | Alta |
 | Alerta visual: vencidos (🔴), próximos ≤6 días (🟠), urgentes | Alta |
-| Despliegue en servidor GHT (entorno de pruebas) | Alta |
 
 **Fuera del MVP Etapa 1:**
-- Adjuntos de archivos
+- Adjuntos de archivos (Azure Blob Storage)
 - Exportación Excel
 - Panel SAC interno
 
@@ -511,11 +530,12 @@ Ingresa al portal para ver el detalle completo.
 
 | Tarea | Prioridad |
 |-------|-----------|
-| Adjunto de archivos (upload + almacenamiento) | Alta |
+| Upload de adjuntos a Azure Blob Storage + SAS tokens | Alta |
 | Campo N° Guía/Remisión | Alta |
-| Exportación Excel de comentarios | Alta |
+| Exportación Excel con ClosedXML (.xlsx) | Alta |
 | Panel SAC interno (vista consolidada por comprador) | Media |
 | Filtros en Panel SAC (proveedor, estado, comprador) | Media |
+| Mover a Azure Container Apps (si escala lo requiere) | Media |
 
 ### Etapa 3 — Mejoras y analítica (estimado: 2026-06-01)
 
@@ -526,19 +546,25 @@ Ingresa al portal para ver el detalle completo.
 | Historial de comentarios por OC | Baja |
 | Exportación global para administrador SAC | Baja |
 | Notificación recordatorio automática (OC vencidas sin comentario) | Baja |
+| Integración con Azure Monitor + Application Insights | Baja |
 
-### Stack tecnológico seleccionado
+### Stack tecnológico oficial
 
 | Capa | Tecnología | Razón |
 |------|-----------|-------|
-| Frontend + Backend | Next.js 14 (App Router) | Full-stack en un solo repo, despliegue simple |
-| Estilos | Tailwind CSS | Velocidad de desarrollo, responsive fácil |
-| Autenticación | NextAuth.js + LDAP | Integración nativa con AD |
-| Base de datos | PostgreSQL + Prisma ORM | Robustez, queries tipadas |
-| Email | Nodemailer (SMTP corporativo GHT) | Sin dependencia de servicios externos |
-| Excel | ExcelJS | Generación de .xlsx sin licencias |
-| Adjuntos | Sistema de archivos local o MinIO | Según infraestructura disponible en GHT |
-| Despliegue | Servidor Windows IIS / Node.js o Docker | Según entorno GHT |
+| **Backend** | ASP.NET Core 8 Web API (C#) | Stack corporativo GHT; alto rendimiento, tipado fuerte |
+| **Frontend** | React 18 + TypeScript | Stack corporativo GHT; SPA con experiencia fluida |
+| **Autenticación** | Azure Active Directory + Microsoft.Identity.Web | SSO corporativo; integración nativa con AD de GHT |
+| **Base de datos** | Azure SQL Database + EF Core 8 | Stack corporativo GHT; datos relacionales, migraciones versionadas |
+| **Archivos adjuntos** | Azure Blob Storage | Stack corporativo GHT; almacenamiento seguro y escalable |
+| **Email** | Azure Communication Services | Integrado en ecosistema Azure; sin dependencia de SMTP externo |
+| **Excel** | ClosedXML (C#) | Librería .NET madura; sin licencias adicionales |
+| **Secrets** | Azure Key Vault | Gestión segura de cadenas de conexión y tokens |
+| **Hosting Backend** | Azure App Service | Stack corporativo GHT; despliegue simple con CI/CD |
+| **Hosting Frontend** | Azure Static Web Apps | Optimizado para SPA React; CDN global integrado |
+| **Contenedores** | Azure Container Apps | Stack corporativo GHT; opción de escalado en Etapa 2+ |
+| **CI/CD** | GitHub Actions → Azure | Automatización de build, test y despliegue |
+| **Monitoreo** | Azure Application Insights | Trazabilidad, errores y métricas de performance |
 
 ---
 
