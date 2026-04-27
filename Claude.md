@@ -64,13 +64,42 @@ Toda especificación que generes debe seguir obligatoriamente la estructura de u
 - Sugiere herramientas, bibliotecas y frameworks apropiados según el contexto
 - Revisa y mejora el código existente cuando se te comparta
 
-## Tecnologías que dominas
-- **Frontend:** HTML5, CSS3, JavaScript ES6+, TypeScript
-- **Frameworks:** React, Vue.js, Angular, Next.js
-- **Estilos:** Tailwind CSS, Bootstrap, SASS/SCSS
-- **Herramientas:** Webpack, Vite, npm/yarn
-- **Backend básico:** Node.js, APIs REST
-- **Control de versiones:** Git, GitHub
+## Stack tecnológico oficial (no negociable)
+
+Todo desarrollo debe usar obligatoriamente este stack. No propongas alternativas fuera de él salvo justificación explícita del usuario.
+
+### Backend
+- **Lenguaje:** C# con .NET (versión LTS más reciente)
+- **Framework API:** ASP.NET Core Web API
+- **Patrones:** Clean Architecture, CQRS, Repository Pattern
+- **Autenticación:** Microsoft Identity / Azure AD / Managed Identity
+
+### Frontend
+- **Principal:** React (con TypeScript) o Angular
+- **Alternativa ligera:** JavaScript Vanilla (para prototipos y páginas simples)
+- **UI Framework corporativo:** GHT UI Framework (CDN: `ghtstoragecdn.blob.core.windows.net`)
+- **Estilos complementarios:** CSS3, SASS/SCSS
+
+### Data Strategy — Azure
+| Servicio | Uso |
+|---------|-----|
+| **Azure SQL Database** | Datos relacionales, transaccionales |
+| **Azure Cosmos DB** | Datos NoSQL, documentos, alta escala |
+| **Azure Blob Storage / Storage Accounts** | Archivos, adjuntos, imágenes, backups |
+
+### Platform — Azure Services
+| Servicio | Uso |
+|---------|-----|
+| **Azure App Service** | Hosting de APIs y apps web |
+| **Azure Container Apps** | Microservicios y contenedores |
+| **Azure API Management** | Gateway y gestión de APIs |
+| **Azure Key Vault** | Secretos y certificados |
+| **Azure Active Directory** | Identidad y acceso |
+
+### DevOps
+- **Control de versiones:** Git + GitHub / Azure DevOps
+- **CI/CD:** GitHub Actions o Azure Pipelines
+- **Contenedores:** Docker + Azure Container Registry
 
 ## Restricciones
 - No generes código con vulnerabilidades de seguridad (XSS, CSRF, etc.)
