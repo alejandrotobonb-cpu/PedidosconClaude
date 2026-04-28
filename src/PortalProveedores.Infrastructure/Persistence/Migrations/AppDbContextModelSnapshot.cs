@@ -22,6 +22,45 @@ namespace PortalProveedores.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("PortalProveedores.Domain.Entities.Adjunto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BlobUri")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("ComentarioId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NombreArchivo")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("TamanioBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TipoMime")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComentarioId");
+
+                    b.ToTable("Adjuntos");
+                });
+
             modelBuilder.Entity("PortalProveedores.Domain.Entities.Comentario", b =>
                 {
                     b.Property<int>("Id")
@@ -40,13 +79,24 @@ namespace PortalProveedores.Infrastructure.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("Notificado")
+                        .HasColumnType("bit");
+
                     b.Property<int>("OrdenCompraId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProveedorNit")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Texto")
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UsuarioId")
                         .IsRequired()
@@ -73,15 +123,25 @@ namespace PortalProveedores.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("CantidadPendiente")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("CantidadPedida")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("CantidadPendiente")
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("CodigoArticulo")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("Descripcion")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<DateTime>("FechaEntrega")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaPedido")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Finca")
@@ -93,6 +153,10 @@ namespace PortalProveedores.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ObsCompras")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ProveedorNit")
                         .IsRequired()
@@ -141,6 +205,9 @@ namespace PortalProveedores.Infrastructure.Persistence.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EmailContacto")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -166,6 +233,17 @@ namespace PortalProveedores.Infrastructure.Persistence.Migrations
                     b.ToTable("Proveedores");
                 });
 
+            modelBuilder.Entity("PortalProveedores.Domain.Entities.Adjunto", b =>
+                {
+                    b.HasOne("PortalProveedores.Domain.Entities.Comentario", "Comentario")
+                        .WithMany("Adjuntos")
+                        .HasForeignKey("ComentarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comentario");
+                });
+
             modelBuilder.Entity("PortalProveedores.Domain.Entities.Comentario", b =>
                 {
                     b.HasOne("PortalProveedores.Domain.Entities.OrdenCompra", "OrdenCompra")
@@ -175,6 +253,11 @@ namespace PortalProveedores.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("OrdenCompra");
+                });
+
+            modelBuilder.Entity("PortalProveedores.Domain.Entities.Comentario", b =>
+                {
+                    b.Navigation("Adjuntos");
                 });
 
             modelBuilder.Entity("PortalProveedores.Domain.Entities.OrdenCompra", b =>

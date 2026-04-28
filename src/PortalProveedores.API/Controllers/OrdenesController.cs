@@ -9,26 +9,20 @@ namespace PortalProveedores.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-// Fix #6: inject Application interfaces, not concrete classes
 public class OrdenesController(
     IOrdenesPorProveedor ordenesPorProveedor,
     IGuardarComentario guardarComentario,
-    IProveedorRepository proveedorRepo) : ControllerBase
+    IProveedorRepository proveedorRepo,
+    IConfiguration config,
+    IWebHostEnvironment env) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetMisOrdenes()
     {
-        var objectId = User.FindFirst("oid")?.Value
-                    ?? User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
+        var nit = await ResolverNitAsync();
+        if (nit is null) return Forbid();
 
-        if (string.IsNullOrEmpty(objectId))
-            return Unauthorized();
-
-        var proveedor = await proveedorRepo.GetByAzureAdObjectIdAsync(objectId);
-        if (proveedor is null)
-            return Forbid();
-
-        var ordenes = await ordenesPorProveedor.ExecuteAsync(proveedor.Nit);
+        var ordenes = await ordenesPorProveedor.ExecuteAsync(nit);
         return Ok(ordenes);
     }
 
@@ -38,11 +32,32 @@ public class OrdenesController(
         if (!ModelState.IsValid || request.OrdenCompraIds.Count == 0)
             return BadRequest();
 
-        var usuarioId = User.FindFirst("oid")?.Value
-                     ?? User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value
-                     ?? string.Empty;
+        var nit = await ResolverNitAsync();
+        if (nit is null) return Forbid();
 
+        var usuarioId = ObtenerObjectId() ?? nit;
         var resultados = await guardarComentario.ExecuteAsync(request, usuarioId);
         return Ok(resultados);
     }
+
+    // En Development, DevBypassProveedorNit evita la búsqueda por AzureAdObjectId
+    private async Task<string?> ResolverNitAsync()
+    {
+        if (env.IsDevelopment())
+        {
+            var devNit = config["DevBypassProveedorNit"];
+            if (!string.IsNullOrEmpty(devNit))
+                return devNit;
+        }
+
+        var objectId = ObtenerObjectId();
+        if (string.IsNullOrEmpty(objectId)) return null;
+
+        var proveedor = await proveedorRepo.GetByAzureAdObjectIdAsync(objectId);
+        return proveedor?.Nit;
+    }
+
+    private string? ObtenerObjectId() =>
+        User.FindFirst("oid")?.Value
+        ?? User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
 }
