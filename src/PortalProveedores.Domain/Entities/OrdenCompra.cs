@@ -8,9 +8,13 @@ public class OrdenCompra
     public string Articulo { get; set; } = string.Empty;
     public string CodigoArticulo { get; set; } = string.Empty;
     public string Finca { get; set; } = string.Empty;
-    public int CantidadPendiente { get; set; }
-    public string UnidadMedida { get; set; } = string.Empty;
+    public string? Descripcion { get; set; }
+    public DateTime? FechaPedido { get; set; }
     public DateTime FechaEntrega { get; set; }
+    public decimal? CantidadPedida { get; set; }
+    public decimal CantidadPendiente { get; set; }
+    public string UnidadMedida { get; set; } = string.Empty;
+    public string? ObsCompras { get; set; }
     public bool Urgente { get; set; }
     public DateTime SyncFecha { get; set; }
 

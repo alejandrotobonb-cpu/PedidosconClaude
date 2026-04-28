@@ -9,4 +9,5 @@ public class Proveedor
     public string AzureAdObjectId { get; set; } = string.Empty;
     public string CompradorEmail { get; set; } = string.Empty;
     public bool Activo { get; set; } = true;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
