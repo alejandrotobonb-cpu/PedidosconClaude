@@ -8,427 +8,271 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; background: #f4f6f8; color: #222; }
 
-  /* ─── HEADER ─────────────────────────────────────── */
+  /* ─── HEADER ── */
   .header {
-    background: #2E7D32;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    height: 52px;
+    background: #2E7D32; color: #fff;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 52px;
     position: sticky; top: 0; z-index: 100;
     box-shadow: 0 2px 6px rgba(0,0,0,.25);
   }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .logo {
-    background: #fff;
-    color: #2E7D32;
-    font-weight: 800;
-    font-size: 16px;
-    padding: 4px 10px;
-    border-radius: 4px;
-    letter-spacing: 1px;
-  }
+  .header-left  { display: flex; align-items: center; gap: 12px; }
+  .logo { background: #fff; color: #2E7D32; font-weight: 800; font-size: 16px; padding: 4px 10px; border-radius: 4px; letter-spacing: 1px; }
   .header-title { font-size: 15px; font-weight: 600; }
-  .header-right { display: flex; align-items: center; gap: 14px; font-size: 13px; }
-  .user-badge { background: rgba(255,255,255,.2); border-radius: 20px; padding: 4px 12px; }
-  .btn-header {
-    background: rgba(255,255,255,.15);
-    border: 1px solid rgba(255,255,255,.4);
-    color: #fff;
-    border-radius: 4px;
-    padding: 5px 12px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: background .2s;
-  }
+  .header-right { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .user-badge   { background: rgba(255,255,255,.2); border-radius: 20px; padding: 4px 12px; font-size: 12px; }
+  .btn-header   { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.4); color: #fff; border-radius: 4px; padding: 5px 12px; cursor: pointer; font-size: 12px; transition: background .2s; }
   .btn-header:hover { background: rgba(255,255,255,.3); }
 
-  /* ─── PAGES ──────────────────────────────────────── */
+  /* ─── PAGES ── */
   .page { display: none; }
   .page.active { display: block; }
+  #page-login.active { display: flex; }
 
-  /* ─── LOGIN ──────────────────────────────────────── */
-  #page-login {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #1B5E20 0%, #388E3C 60%, #66BB6A 100%);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .login-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 48px 40px;
-    width: 380px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.25);
-    text-align: center;
-  }
-  .login-logo {
-    background: #2E7D32;
-    color: #fff;
-    font-weight: 900;
-    font-size: 28px;
-    display: inline-block;
-    padding: 10px 22px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    letter-spacing: 2px;
-  }
+  /* ─── LOGIN ── */
+  #page-login { min-height: 100vh; background: linear-gradient(135deg,#1B5E20 0%,#388E3C 60%,#66BB6A 100%); align-items: center; justify-content: center; }
+  .login-card  { background: #fff; border-radius: 12px; padding: 48px 40px; width: 380px; box-shadow: 0 8px 32px rgba(0,0,0,.25); text-align: center; }
+  .login-logo  { background: #2E7D32; color: #fff; font-weight: 900; font-size: 28px; display: inline-block; padding: 10px 22px; border-radius: 8px; margin-bottom: 8px; letter-spacing: 2px; }
   .login-subtitle { color: #555; font-size: 13px; margin-bottom: 28px; }
   .login-card h2 { font-size: 18px; color: #1B5E20; margin-bottom: 6px; }
-  .login-card p { font-size: 13px; color: #777; margin-bottom: 24px; }
-  .form-group { margin-bottom: 16px; text-align: left; }
+  .login-card p  { font-size: 13px; color: #777; margin-bottom: 24px; }
+  .form-group   { margin-bottom: 16px; text-align: left; }
   .form-group label { font-size: 12px; color: #555; display: block; margin-bottom: 4px; font-weight: 600; }
-  .form-group input {
-    width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 6px;
-    font-size: 14px; transition: border .2s;
-  }
+  .form-group input { width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 6px; font-size: 14px; transition: border .2s; }
   .form-group input:focus { outline: none; border-color: #2E7D32; }
-  .btn-login {
-    width: 100%; background: #2E7D32; color: #fff; border: none;
-    padding: 12px; border-radius: 6px; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: background .2s; margin-top: 4px;
-  }
+  .btn-login { width: 100%; background: #2E7D32; color: #fff; border: none; padding: 12px; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background .2s; margin-top: 4px; }
   .btn-login:hover { background: #1B5E20; }
   .ad-note { margin-top: 14px; font-size: 11px; color: #aaa; }
 
-  /* ─── INSTRUCTIVO ────────────────────────────────── */
+  /* ─── INSTRUCTIVO ── */
   #page-instructivo { min-height: calc(100vh - 52px); background: #f4f6f8; padding: 32px 20px; }
-  .instructivo-card {
-    max-width: 760px; margin: 0 auto;
-    background: #fff; border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(0,0,0,.1);
-    overflow: hidden;
-  }
+  .instructivo-card { max-width: 760px; margin: 0 auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,.1); overflow: hidden; }
   .instructivo-body { padding: 36px 40px; }
   .welcome-title { font-size: 22px; font-weight: 700; color: #1B5E20; margin-bottom: 6px; }
-  .welcome-sub { color: #555; font-size: 14px; margin-bottom: 28px; }
-  .info-box {
-    background: #E8F5E9; border-left: 4px solid #2E7D32;
-    border-radius: 0 6px 6px 0; padding: 16px 20px; margin-bottom: 20px;
-  }
-  .info-box h3 { color: #1B5E20; font-size: 14px; margin-bottom: 10px; }
-  .info-box ul { padding-left: 4px; list-style: none; }
+  .welcome-sub   { color: #555; font-size: 14px; margin-bottom: 28px; }
+  .info-box      { background: #E8F5E9; border-left: 4px solid #2E7D32; border-radius: 0 6px 6px 0; padding: 16px 20px; margin-bottom: 16px; }
+  .info-box h3   { color: #1B5E20; font-size: 14px; margin-bottom: 10px; }
+  .info-box ul   { padding-left: 4px; list-style: none; }
   .info-box ul li { padding: 4px 0; color: #333; font-size: 13px; }
   .info-box ul li::before { content: "👉 "; }
-  .warning-box {
-    background: #FFF8E1; border-left: 4px solid #F57C00;
-    border-radius: 0 6px 6px 0; padding: 16px 20px; margin-bottom: 28px;
-  }
+  .warning-box   { background: #FFF8E1; border-left: 4px solid #F57C00; border-radius: 0 6px 6px 0; padding: 16px 20px; margin-bottom: 28px; }
   .warning-box h3 { color: #E65100; font-size: 14px; margin-bottom: 10px; }
   .warning-box ul { padding-left: 4px; list-style: none; }
   .warning-box ul li { padding: 4px 0; color: #444; font-size: 13px; }
   .warning-box ul li::before { content: "⚠️ "; }
-  .instructivo-footer {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 16px 40px; background: #f9f9f9; border-top: 1px solid #eee;
-  }
+  .instructivo-footer { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #f9f9f9; border-top: 1px solid #eee; }
   .footer-note { font-size: 12px; color: #888; }
-  .btn-next {
-    background: #2E7D32; color: #fff; border: none;
-    padding: 10px 28px; border-radius: 6px; font-size: 14px;
-    font-weight: 600; cursor: pointer; transition: background .2s;
-    display: flex; align-items: center; gap: 8px;
-  }
+  .btn-next { background: #2E7D32; color: #fff; border: none; padding: 10px 28px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .2s; display: flex; align-items: center; gap: 8px; }
   .btn-next:hover { background: #1B5E20; }
 
-  /* ─── MAIN PANEL ─────────────────────────────────── */
+  /* ─── MAIN LAYOUT ── */
   #page-main { min-height: calc(100vh - 52px); background: #f0f2f5; }
-  .main-toolbar {
-    background: #fff; padding: 8px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid #e0e0e0; font-size: 13px; color: #555;
-  }
-  .toolbar-info { display: flex; gap: 20px; align-items: center; }
-  .badge-stat {
-    display: flex; align-items: center; gap: 6px;
-    background: #f4f6f8; border-radius: 20px; padding: 4px 12px;
-  }
+  .main-toolbar { background: #fff; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e0e0e0; font-size: 13px; }
+  .toolbar-info { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .badge-stat   { display: flex; align-items: center; gap: 6px; background: #f4f6f8; border-radius: 20px; padding: 4px 12px; font-size: 12px; }
   .badge-stat span { font-weight: 700; }
   .badge-stat .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .btn-excel {
-    background: #1B6E23; color: #fff; border: none;
-    padding: 7px 16px; border-radius: 5px; font-size: 12px;
-    cursor: pointer; transition: background .2s; display: flex; align-items: center; gap: 6px;
-  }
+  .btn-excel    { background: #1B6E23; color: #fff; border: none; padding: 7px 16px; border-radius: 5px; font-size: 12px; cursor: pointer; transition: background .2s; display: flex; align-items: center; gap: 6px; }
   .btn-excel:hover { background: #145219; }
 
-  .panels-grid {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    grid-template-rows: auto 1fr;
-    gap: 0;
-    height: calc(100vh - 52px - 44px);
-  }
+  .panels-grid  { display: grid; grid-template-columns: 320px 1fr; height: calc(100vh - 52px - 44px); }
 
-  /* Panel 2 – lista */
-  .panel-list {
-    grid-row: 1 / 3;
-    background: #fff;
-    border-right: 1px solid #e0e0e0;
-    overflow-y: auto;
-    display: flex; flex-direction: column;
+  /* ─── PANEL LISTA ── */
+  .panel-list   { background: #fff; border-right: 1px solid #e0e0e0; overflow: hidden; display: flex; flex-direction: column; }
+  .panel-list-header { padding: 10px 12px; background: #f9f9f9; border-bottom: 1px solid #eee; flex-shrink: 0; }
+  .panel-list-header-title { font-weight: 700; font-size: 13px; color: #333; margin-bottom: 8px; }
+  .search-input { width: 100%; padding: 7px 10px; border: 1px solid #e0e0e0; border-radius: 5px; font-size: 12px; margin-bottom: 6px; }
+  .search-input:focus { outline: none; border-color: #2E7D32; }
+  .filter-row   { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 2px; }
+  .filter-chip  { font-size: 11px; padding: 3px 9px; border-radius: 10px; border: 1px solid #ddd; background: #fff; cursor: pointer; color: #555; transition: all .15s; white-space: nowrap; }
+  .filter-chip.active { background: #2E7D32; color: #fff; border-color: #2E7D32; }
+  .oc-scroll    { overflow-y: auto; flex: 1; }
+
+  /* Barra de selección múltiple */
+  .multi-bar {
+    display: none; align-items: center; justify-content: space-between;
+    background: #1565C0; color: #fff;
+    padding: 8px 12px; font-size: 12px; flex-shrink: 0;
+    border-bottom: 1px solid #0D47A1;
   }
-  .panel-list-header {
-    padding: 12px 14px;
-    background: #f9f9f9;
-    border-bottom: 1px solid #eee;
-    font-weight: 700; font-size: 13px; color: #333;
-    position: sticky; top: 0; z-index: 10;
+  .multi-bar.visible { display: flex; }
+  .multi-bar-left { display: flex; align-items: center; gap: 8px; }
+  .btn-clear-sel { background: rgba(255,255,255,.2); border: none; color: #fff; border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; }
+  .btn-clear-sel:hover { background: rgba(255,255,255,.35); }
+
+  /* Grupos de artículo */
+  .art-group    { border-bottom: 2px solid #e8f5e9; }
+  .art-group-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; background: #f1f8f1;
+    cursor: pointer; user-select: none;
+    border-bottom: 1px solid #dcedc8;
+    position: sticky; top: 0; z-index: 4;
   }
+  .art-group-header:hover { background: #e8f5e9; }
+  .art-group-left  { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+  .art-group-icon  { font-size: 12px; color: #555; transition: transform .2s; flex-shrink: 0; }
+  .art-group-icon.collapsed { transform: rotate(-90deg); }
+  .art-group-name  { font-size: 12px; font-weight: 700; color: #1B5E20; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .art-group-code  { font-size: 10px; color: #888; flex-shrink: 0; }
+  .art-group-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .art-group-badge { font-size: 10px; background: #2E7D32; color: #fff; border-radius: 10px; padding: 1px 7px; white-space: nowrap; }
+  .art-group-badge.warn { background: #E65100; }
+  .art-group-badge.danger { background: #C62828; }
+  .btn-sel-group   { font-size: 10px; background: #E8F5E9; border: 1px solid #A5D6A7; color: #1B5E20; border-radius: 3px; padding: 2px 6px; cursor: pointer; white-space: nowrap; }
+  .btn-sel-group:hover { background: #C8E6C9; }
+  .art-group-items.collapsed { display: none; }
+
+  /* Items OC */
   .oc-item {
-    padding: 10px 14px;
-    border-bottom: 1px solid #f0f0f0;
-    cursor: pointer;
-    transition: background .15s;
-    display: grid;
-    grid-template-columns: 52px 1fr;
-    gap: 8px;
-    align-items: start;
+    display: grid; grid-template-columns: 32px 48px 1fr;
+    gap: 8px; padding: 8px 12px;
+    border-bottom: 1px solid #f5f5f5;
+    cursor: pointer; transition: background .15s; align-items: center;
   }
-  .oc-item:hover { background: #f5f5f5; }
-  .oc-item.selected { background: #E3F2FD; border-left: 3px solid #1565C0; }
-  .oc-days {
-    text-align: center;
-    font-weight: 800;
-    font-size: 15px;
-    border-radius: 6px;
-    padding: 6px 4px;
-    line-height: 1.1;
-  }
+  .oc-item:hover { background: #fafafa; }
+  .oc-item.active  { background: #E3F2FD; border-left: 3px solid #1565C0; padding-left: 9px; }
+  .oc-item.checked { background: #EDE7F6; border-left: 3px solid #7B1FA2; padding-left: 9px; }
+  .oc-item.active.checked { background: #D1C4E9; border-left: 3px solid #4A148C; }
+  .oc-cb { width: 16px; height: 16px; cursor: pointer; accent-color: #7B1FA2; flex-shrink: 0; }
+  .oc-days  { text-align: center; font-weight: 800; font-size: 14px; border-radius: 5px; padding: 4px 2px; line-height: 1.1; }
   .oc-days small { font-size: 9px; font-weight: 500; display: block; }
-  .days-red { background: #FFEBEE; color: #C62828; }
+  .days-red    { background: #FFEBEE; color: #C62828; }
   .days-orange { background: #FFF3E0; color: #E65100; }
-  .days-green { background: #E8F5E9; color: #2E7D32; }
-  .oc-info { overflow: hidden; }
-  .oc-finca { font-size: 11px; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .oc-num { font-weight: 700; font-size: 13px; color: #1B5E20; }
-  .oc-art { font-size: 12px; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
-  .badge-urgente {
-    display: inline-block;
-    background: #B71C1C; color: #fff;
-    font-size: 9px; font-weight: 700;
-    padding: 1px 5px; border-radius: 3px;
-    margin-top: 3px; letter-spacing: .5px;
-  }
-  .badge-comentado {
-    display: inline-block;
-    background: #E8F5E9; color: #2E7D32;
-    font-size: 9px; font-weight: 600;
-    padding: 1px 5px; border-radius: 3px;
-    margin-top: 3px; border: 1px solid #A5D6A7;
-  }
+  .days-green  { background: #E8F5E9; color: #2E7D32; }
+  .oc-info  { overflow: hidden; }
+  .oc-finca { font-size: 12px; font-weight: 600; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .oc-num   { font-size: 11px; color: #1B5E20; font-weight: 600; }
+  .oc-tags  { display: flex; gap: 3px; margin-top: 2px; flex-wrap: wrap; }
+  .tag      { font-size: 9px; padding: 1px 5px; border-radius: 3px; font-weight: 600; }
+  .tag-urgente  { background: #B71C1C; color: #fff; }
+  .tag-comentado { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+  .tag-cant     { background: #f0f0f0; color: #666; }
 
-  /* Panel 1 – indicador días */
-  .panel-indicator {
-    background: #fff;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 14px 20px;
-    display: flex; align-items: center; gap: 20px;
+  /* ─── PANEL DERECHO ── */
+  .panel-right  { overflow-y: auto; background: #f4f6f8; display: flex; flex-direction: column; }
+
+  /* Indicador superior */
+  .indicator-row {
+    display: flex; align-items: center; gap: 16px;
+    background: #fff; padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0; flex-shrink: 0;
   }
-  .indicator-box {
-    border-radius: 10px;
-    padding: 12px 20px;
-    text-align: center;
-    min-width: 110px;
-  }
-  .indicator-box .ind-num { font-size: 34px; font-weight: 900; line-height: 1; }
-  .indicator-box .ind-label { font-size: 11px; font-weight: 500; margin-top: 2px; }
-  .ind-red { background: #FFEBEE; color: #C62828; }
+  .ind-box   { border-radius: 8px; padding: 10px 16px; text-align: center; min-width: 90px; }
+  .ind-num   { font-size: 30px; font-weight: 900; line-height: 1; }
+  .ind-label { font-size: 10px; font-weight: 500; margin-top: 2px; }
+  .ind-red    { background: #FFEBEE; color: #C62828; }
   .ind-orange { background: #FFF3E0; color: #E65100; }
-  .ind-green { background: #E8F5E9; color: #2E7D32; }
-  .indicator-meta { flex: 1; }
-  .indicator-meta h3 { font-size: 15px; color: #1B5E20; font-weight: 700; margin-bottom: 4px; }
-  .indicator-meta p { font-size: 12px; color: #777; }
-  .indicator-meta .tag-urgente {
-    display: inline-block;
-    background: #B71C1C; color: #fff;
-    font-size: 11px; font-weight: 700;
-    padding: 2px 10px; border-radius: 4px;
-    margin-top: 4px; letter-spacing: 1px;
-  }
+  .ind-green  { background: #E8F5E9; color: #2E7D32; }
+  .ind-meta h3 { font-size: 15px; font-weight: 700; color: #1B5E20; margin-bottom: 4px; }
+  .ind-meta p  { font-size: 12px; color: #777; }
 
-  /* Panel 3 + 4 */
-  .panel-right {
-    overflow-y: auto;
-    padding: 0;
-    display: flex; flex-direction: column; gap: 0;
-  }
-  .panel-card {
-    background: #fff;
-    margin: 12px 12px 0 12px;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
-  }
+  /* Cards */
+  .panel-card { background: #fff; margin: 12px 12px 0 12px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
   .panel-card:last-child { margin-bottom: 12px; }
-  .panel-card-header {
-    background: #f9f9f9;
-    padding: 10px 16px;
-    font-weight: 700; font-size: 13px; color: #333;
-    border-bottom: 1px solid #eee;
-    border-radius: 8px 8px 0 0;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .panel-card-header .dot-panel { width: 10px; height: 10px; border-radius: 50%; }
-  .panel-card-body { padding: 16px 16px 20px 16px; }
+  .panel-card-header { background: #f9f9f9; padding: 10px 16px; font-weight: 700; font-size: 13px; color: #333; border-bottom: 1px solid #eee; border-radius: 8px 8px 0 0; display: flex; align-items: center; gap: 8px; }
+  .dot-panel { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .panel-card-body { padding: 16px 16px 20px; }
 
-  /* Detalle */
-  .detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
-  .detail-field {
-    padding: 10px 12px;
-    border-bottom: 1px solid #f4f4f4;
-  }
-  .detail-field:nth-child(odd)  { border-right: 1px solid #f4f4f4; }
-  .detail-field label { font-size: 11px; color: #999; font-weight: 600; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .4px; }
+  /* Detalle single */
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .detail-field { padding: 10px 12px; border-bottom: 1px solid #f4f4f4; }
+  .detail-field:nth-child(odd) { border-right: 1px solid #f4f4f4; }
+  .detail-field.full { grid-column: 1/3; border-right: none; }
+  .detail-field label { font-size: 10px; color: #999; font-weight: 700; display: block; margin-bottom: 3px; text-transform: uppercase; letter-spacing: .4px; }
   .detail-field span  { font-size: 13px; color: #222; line-height: 1.4; }
-  .detail-field.full  { grid-column: 1 / 3; border-right: none; }
-  .detail-obs {
-    background: #f9f9f9; border-radius: 4px; padding: 8px 10px;
-    font-size: 12px; color: #444; margin-top: 4px; border: 1px solid #eee;
-  }
+  .detail-obs { background: #f9f9f9; border-radius: 4px; padding: 8px 10px; font-size: 12px; color: #444; margin-top: 4px; border: 1px solid #eee; }
+
+  /* Tabla multi-selección */
+  .multi-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .multi-table th { background: #f4f6f8; padding: 8px 10px; text-align: left; color: #555; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .3px; border-bottom: 2px solid #e0e0e0; }
+  .multi-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; color: #333; vertical-align: middle; }
+  .multi-table tr:last-child td { border-bottom: none; }
+  .multi-table tr:hover td { background: #fafafa; }
+  .multi-remove { color: #C62828; cursor: pointer; font-size: 13px; font-weight: 700; padding: 2px 6px; border-radius: 3px; border: none; background: none; }
+  .multi-remove:hover { background: #FFEBEE; }
+  .multi-summary { display: flex; gap: 16px; padding: 10px 12px; background: #EDE7F6; border-radius: 6px; margin-bottom: 12px; font-size: 12px; }
+  .multi-summary-item { display: flex; align-items: center; gap: 6px; }
+  .multi-summary-item strong { color: #4A148C; font-size: 15px; }
 
   /* Panel 4 – comentarios */
   .form-row { margin-bottom: 14px; }
   .form-row label { font-size: 12px; color: #555; font-weight: 600; display: block; margin-bottom: 5px; }
   .form-row label .req { color: #C62828; }
   .form-row textarea, .form-row input[type=text], .form-row input[type=date] {
-    width: 100%; padding: 9px 12px;
-    border: 1.5px solid #ddd; border-radius: 6px;
-    font-size: 13px; font-family: inherit;
-    transition: border .2s; resize: vertical;
+    width: 100%; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 6px;
+    font-size: 13px; font-family: inherit; transition: border .2s; resize: vertical;
   }
   .form-row textarea:focus, .form-row input:focus { outline: none; border-color: #2E7D32; }
   .form-row textarea { min-height: 80px; }
-  .form-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .upload-area {
-    border: 2px dashed #ccc; border-radius: 6px;
-    padding: 16px; text-align: center; color: #888; font-size: 12px;
-    cursor: pointer; transition: border .2s, background .2s;
-  }
+  .form-two-col  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .upload-area   { border: 2px dashed #ccc; border-radius: 6px; padding: 14px; text-align: center; color: #888; font-size: 12px; cursor: pointer; transition: border .2s, background .2s; }
   .upload-area:hover { border-color: #2E7D32; background: #f1f8f1; }
-  .upload-area .upload-icon { font-size: 24px; margin-bottom: 6px; }
-  .file-list { margin-top: 8px; }
-  .file-item {
-    display: flex; align-items: center; gap: 8px;
-    background: #f4f6f8; border-radius: 4px;
-    padding: 6px 10px; margin-top: 6px; font-size: 12px;
-  }
-  .file-item .file-remove { margin-left: auto; color: #C62828; cursor: pointer; font-weight: 700; }
-  .form-footer { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 4px; }
-  .btn-save {
-    background: #2E7D32; color: #fff; border: none;
-    padding: 10px 24px; border-radius: 6px; font-size: 14px;
-    font-weight: 700; cursor: pointer; transition: background .2s;
-    display: flex; align-items: center; gap: 8px;
-  }
+  .upload-icon   { font-size: 22px; margin-bottom: 4px; }
+  .file-list     { margin-top: 8px; }
+  .file-item     { display: flex; align-items: center; gap: 8px; background: #f4f6f8; border-radius: 4px; padding: 5px 10px; margin-top: 5px; font-size: 12px; }
+  .file-remove   { margin-left: auto; color: #C62828; cursor: pointer; font-weight: 700; }
+  .form-footer   { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 4px; }
+  .save-note     { font-size: 11px; color: #888; }
+  .btn-save      { background: #2E7D32; color: #fff; border: none; padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .2s; display: flex; align-items: center; gap: 8px; }
   .btn-save:hover { background: #1B5E20; }
-  .btn-save:disabled { background: #aaa; cursor: not-allowed; }
-  .save-note { font-size: 11px; color: #888; }
 
-  /* ─── TOAST ──────────────────────────────────────── */
-  .toast {
-    position: fixed; bottom: 24px; right: 24px;
-    background: #1B5E20; color: #fff;
-    padding: 14px 20px; border-radius: 8px;
-    font-size: 13px; font-weight: 500;
-    box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  /* Afected banner */
+  .affected-banner {
     display: flex; align-items: center; gap: 10px;
-    transform: translateY(100px); opacity: 0;
-    transition: transform .3s, opacity .3s;
-    z-index: 999;
+    background: #EDE7F6; border: 1px solid #CE93D8;
+    border-radius: 6px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px;
   }
-  .toast.show { transform: translateY(0); opacity: 1; }
+  .affected-banner strong { color: #4A148C; font-size: 18px; }
+  .affected-banner span   { color: #555; }
 
-  /* ─── EMPTY STATE ────────────────────────────────── */
-  .empty-state {
-    text-align: center; padding: 60px 20px; color: #aaa;
-  }
-  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
-  .empty-state p { font-size: 13px; }
+  /* Empty */
+  .empty-state { text-align: center; padding: 60px 20px; color: #aaa; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .empty-icon  { font-size: 48px; margin-bottom: 12px; }
 
-  /* ─── MODAL EXCEL ────────────────────────────────── */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.45);
-    display: none; align-items: center; justify-content: center; z-index: 200;
-  }
+  /* Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; z-index: 200; }
   .modal-overlay.show { display: flex; }
-  .modal {
-    background: #fff; border-radius: 10px;
-    padding: 28px; width: 480px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.2);
-  }
+  .modal { background: #fff; border-radius: 10px; padding: 28px; width: 500px; box-shadow: 0 8px 32px rgba(0,0,0,.2); }
   .modal h3 { font-size: 16px; color: #1B5E20; margin-bottom: 16px; }
   .modal table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px; }
   .modal th { background: #E8F5E9; padding: 8px 10px; text-align: left; color: #1B5E20; }
   .modal td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; color: #444; }
   .modal-footer { display: flex; justify-content: flex-end; gap: 10px; }
-  .btn-cancel {
-    background: #f4f4f4; color: #555; border: 1px solid #ddd;
-    padding: 8px 18px; border-radius: 5px; cursor: pointer; font-size: 13px;
-  }
-  .btn-download {
-    background: #2E7D32; color: #fff; border: none;
-    padding: 8px 18px; border-radius: 5px; cursor: pointer;
-    font-size: 13px; font-weight: 600;
-  }
+  .btn-cancel   { background: #f4f4f4; color: #555; border: 1px solid #ddd; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-size: 13px; }
+  .btn-download { background: #2E7D32; color: #fff; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600; }
 
-  /* ─── SCROLLBAR ──────────────────────────────────── */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
+  /* Toast */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #1B5E20; color: #fff; padding: 14px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: flex; align-items: center; gap: 10px; transform: translateY(100px); opacity: 0; transition: transform .3s, opacity .3s; z-index: 999; max-width: 420px; }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #aaa; }
-
-  /* ─── SEARCH ─────────────────────────────────────── */
-  .search-input {
-    width: 100%; padding: 7px 10px;
-    border: 1px solid #e0e0e0; border-radius: 5px;
-    font-size: 12px; margin-bottom: 8px;
-  }
-  .search-input:focus { outline: none; border-color: #2E7D32; }
-  .filter-row {
-    display: flex; gap: 6px; margin-bottom: 4px;
-  }
-  .filter-btn {
-    font-size: 10px; padding: 3px 8px; border-radius: 10px;
-    border: 1px solid #ddd; background: #fff; cursor: pointer;
-    color: #555; transition: all .15s;
-  }
-  .filter-btn.active { background: #2E7D32; color: #fff; border-color: #2E7D32; }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════
-     PÁGINA 0: LOGIN
-═══════════════════════════════════════════════════════ -->
+<!-- ══ LOGIN ═══════════════════════════════════════════ -->
 <div id="page-login" class="page active">
-  <div style="height:100vh; background:linear-gradient(135deg,#1B5E20 0%,#388E3C 60%,#66BB6A 100%); display:flex; align-items:center; justify-content:center;">
-    <div class="login-card">
-      <div class="login-logo">GHT</div>
-      <div class="login-subtitle">Growers Hub Trading</div>
-      <h2>Portal de Proveedores</h2>
-      <p>Ingresa con tus credenciales corporativas</p>
-      <div class="form-group">
-        <label>Usuario (correo corporativo)</label>
-        <input type="text" id="input-user" value="proveedor@agricolasac.com" placeholder="usuario@empresa.com">
-      </div>
-      <div class="form-group">
-        <label>Contraseña</label>
-        <input type="password" value="••••••••" placeholder="Contraseña">
-      </div>
-      <button class="btn-login" onclick="goToInstructivo()">Ingresar →</button>
-      <p class="ad-note">🔒 Autenticación segura via Directorio Activo GHT</p>
+  <div class="login-card">
+    <div class="login-logo">GHT</div>
+    <div class="login-subtitle">Growers Hub Trading</div>
+    <h2>Portal de Proveedores</h2>
+    <p>Ingresa con tus credenciales corporativas</p>
+    <div class="form-group">
+      <label>Usuario (correo corporativo)</label>
+      <input type="text" value="proveedor@cartonessac.com">
     </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" value="••••••••">
+    </div>
+    <button class="btn-login" onclick="goToInstructivo()">Ingresar →</button>
+    <p class="ad-note">🔒 Autenticación segura via Directorio Activo GHT</p>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     ENCABEZADO GLOBAL (oculto en login)
-═══════════════════════════════════════════════════════ -->
+<!-- ══ HEADER ══════════════════════════════════════════ -->
 <div id="global-header" style="display:none;">
   <div class="header">
     <div class="header-left">
@@ -436,132 +280,105 @@
       <span class="header-title">Control Pendientes de Entrega GHT – Proveedores</span>
     </div>
     <div class="header-right">
-      <span class="user-badge">👤 Agrícola SAC Ltda.</span>
+      <span class="user-badge">👤 Cartones SAC Ltda.</span>
       <button class="btn-header" onclick="showModal()">📊 Exportar Excel</button>
       <button class="btn-header" onclick="logout()">⎋ Salir</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     PÁGINA 1: INSTRUCTIVO
-═══════════════════════════════════════════════════════ -->
+<!-- ══ INSTRUCTIVO ══════════════════════════════════════ -->
 <div id="page-instructivo" class="page">
-  <div style="padding:32px 20px; background:#f4f6f8; min-height:calc(100vh - 52px);">
-    <div class="instructivo-card">
-      <div class="instructivo-body">
-        <div class="welcome-title">¡Bienvenido, estimado proveedor! 👋</div>
-        <div class="welcome-sub">Has ingresado como: <strong>Agrícola SAC Ltda.</strong> · NIT: 900.123.456-7</div>
-
-        <div class="info-box">
-          <h3>¿Qué puedes hacer en esta aplicación?</h3>
-          <ul>
-            <li>Consultar tus pedidos pendientes de entrega con GHT</li>
-            <li>Ver el detalle completo de cada orden de compra</li>
-            <li>Registrar comentarios y fechas compromiso de entrega</li>
-            <li>Adjuntar documentos de soporte (facturas, guías, fotos)</li>
-          </ul>
-        </div>
-
-        <div class="info-box" style="background:#E3F2FD; border-color:#1565C0;">
-          <h3 style="color:#1565C0;">👉 Pasos para registrar un comentario</h3>
-          <ul style="">
-            <li style="list-style:none;">1. Selecciona un pedido de la lista (panel izquierdo)</li>
-            <li style="list-style:none;">2. Revisa el detalle del pedido (panel derecho superior)</li>
-            <li style="list-style:none;">3. Escribe tu comentario en el panel inferior</li>
-            <li style="list-style:none;">4. Haz clic en 💾 Guardar — ¡es obligatorio!</li>
-          </ul>
-        </div>
-
-        <div class="warning-box">
-          <h3>Información importante</h3>
-          <ul>
-            <li>Debes presionar el botón 💾 <strong>Guardar</strong> para que tu comentario quede registrado</li>
-            <li>La información que registres es visible para el equipo de compras GHT</li>
-            <li>Solo puedes ver los pedidos de tu empresa</li>
-            <li>Los pedidos marcados en <span style="color:#B71C1C;font-weight:700;">ROJO URGENTE</span> requieren atención inmediata</li>
-            <li>Para novedades críticas, contacta a tu comprador asignado por correo</li>
-          </ul>
-        </div>
+  <div class="instructivo-card">
+    <div class="instructivo-body">
+      <div class="welcome-title">¡Bienvenido, estimado proveedor! 👋</div>
+      <div class="welcome-sub">Has ingresado como: <strong>Cartones SAC Ltda.</strong> · NIT: 900.456.789-1</div>
+      <div class="info-box">
+        <h3>¿Qué puedes hacer en esta aplicación?</h3>
+        <ul>
+          <li>Consultar tus órdenes de compra pendientes de entrega por finca destino</li>
+          <li>Seleccionar <strong>una o varias OC</strong> del mismo artículo y comentarlas a la vez</li>
+          <li>Registrar la fecha compromiso y adjuntar documentos de soporte</li>
+        </ul>
       </div>
-      <div class="instructivo-footer">
-        <div>
-          <div class="footer-note">Usuario activo: proveedor@agricolasac.com</div>
-          <div class="footer-note">GHT – Growers Hub Trading · Solo ves información de tu empresa</div>
-        </div>
-        <button class="btn-next" onclick="goToMain()">
-          Ver mis pedidos ➡️
-        </button>
+      <div class="info-box" style="background:#EDE7F6; border-color:#7B1FA2;">
+        <h3 style="color:#4A148C;">💡 Tip — Comentar varias OC a la vez</h3>
+        <ul>
+          <li style="list-style:none;">1. Marca los <strong>checkboxes</strong> de las OC que quieras actualizar</li>
+          <li style="list-style:none;">2. O usa <strong>"Seleccionar grupo"</strong> para marcar todas las OC de un artículo</li>
+          <li style="list-style:none;">3. Escribe el comentario y fecha compromiso <strong>una sola vez</strong> — se guardará en todas</li>
+        </ul>
       </div>
+      <div class="warning-box">
+        <h3>Información importante</h3>
+        <ul>
+          <li>Debes presionar 💾 <strong>Guardar</strong> para registrar el comentario</li>
+          <li>Solo ves las OC de tu empresa — cada finca tiene su propia orden</li>
+          <li>Los pedidos <span style="background:#B71C1C;color:#fff;padding:0 5px;border-radius:3px;font-size:11px;">URGENTE</span> requieren atención inmediata</li>
+        </ul>
+      </div>
+    </div>
+    <div class="instructivo-footer">
+      <div>
+        <div class="footer-note">Usuario activo: proveedor@cartonessac.com</div>
+        <div class="footer-note">GHT – Growers Hub Trading · Solo ves información de tu empresa</div>
+      </div>
+      <button class="btn-next" onclick="goToMain()">Ver mis pedidos ➡️</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     PÁGINA 2: PANEL PRINCIPAL
-═══════════════════════════════════════════════════════ -->
+<!-- ══ PANEL PRINCIPAL ══════════════════════════════════ -->
 <div id="page-main" class="page">
-  <!-- Toolbar -->
   <div class="main-toolbar">
     <div class="toolbar-info">
-      <div class="badge-stat">
-        <div class="dot" style="background:#C62828;"></div>
-        <span id="count-vencidos">0</span> vencidos
-      </div>
-      <div class="badge-stat">
-        <div class="dot" style="background:#E65100;"></div>
-        <span id="count-proximos">0</span> próximos a vencer (≤6 días)
-      </div>
-      <div class="badge-stat">
-        <div class="dot" style="background:#B71C1C;"></div>
-        <span id="count-urgentes">0</span> urgentes
-      </div>
-      <div class="badge-stat" style="background:#e8f5e9;">
-        Total: <span id="count-total" style="font-weight:700;">&nbsp;</span> pedidos
-      </div>
+      <div class="badge-stat"><div class="dot" style="background:#C62828;"></div><span id="c-venc">0</span>&nbsp;vencidos</div>
+      <div class="badge-stat"><div class="dot" style="background:#E65100;"></div><span id="c-prox">0</span>&nbsp;próximos ≤6d</div>
+      <div class="badge-stat"><div class="dot" style="background:#B71C1C;"></div><span id="c-urg">0</span>&nbsp;urgentes</div>
+      <div class="badge-stat" style="background:#e8f5e9;"><span id="c-tot">0</span>&nbsp;OC · <span id="c-art">0</span>&nbsp;artículos</div>
     </div>
     <button class="btn-excel" onclick="showModal()">📊 Exportar comentarios Excel</button>
   </div>
 
   <div class="panels-grid">
-    <!-- PANEL 2: LISTA -->
+    <!-- Lista -->
     <div class="panel-list">
       <div class="panel-list-header">
-        📋 Pedidos Pendientes
-        <div style="margin-top:8px;">
-          <input class="search-input" type="text" placeholder="🔍 Buscar OC, artículo, finca…" oninput="filterList(this.value)">
-          <div class="filter-row">
-            <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
-            <button class="filter-btn" onclick="setFilter('vencidos',this)">Vencidos</button>
-            <button class="filter-btn" onclick="setFilter('proximos',this)">≤6 días</button>
-            <button class="filter-btn" onclick="setFilter('urgentes',this)">Urgentes</button>
-          </div>
+        <div class="panel-list-header-title">📋 Pedidos Pendientes</div>
+        <input class="search-input" type="text" placeholder="🔍 Buscar artículo, finca, OC…" oninput="filterList(this.value)">
+        <div class="filter-row">
+          <button class="filter-chip active" onclick="setFilter('todos',this)">Todos</button>
+          <button class="filter-chip" onclick="setFilter('vencidos',this)">Vencidos</button>
+          <button class="filter-chip" onclick="setFilter('proximos',this)">≤ 6 días</button>
+          <button class="filter-chip" onclick="setFilter('urgentes',this)">Urgentes</button>
         </div>
       </div>
-      <div id="oc-list"></div>
-    </div>
-
-    <!-- PANEL 1: INDICADOR -->
-    <div class="panel-indicator" id="panel-indicator">
-      <div class="empty-state" style="padding:20px 0; flex:1;">
-        <div class="empty-icon">📦</div>
-        <p>Selecciona un pedido de la lista para ver el detalle</p>
+      <!-- Barra multi-selección -->
+      <div class="multi-bar" id="multi-bar">
+        <div class="multi-bar-left">
+          <span>✓ <strong id="sel-count">0</strong> OC seleccionadas</span>
+          <button class="btn-clear-sel" onclick="clearSelection()">Limpiar</button>
+        </div>
+        <span style="font-size:11px;opacity:.8;">Panel derecho: comentario conjunto</span>
       </div>
+      <div class="oc-scroll" id="oc-list"></div>
     </div>
 
-    <!-- PANELES 3 y 4 -->
+    <!-- Panel derecho -->
     <div class="panel-right" id="panel-right">
+      <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <p style="font-size:13px;">Selecciona una OC o marca varios checkboxes<br>para comentar en conjunto</p>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     MODAL EXCEL
-═══════════════════════════════════════════════════════ -->
+<!-- ══ MODAL EXCEL ══════════════════════════════════════ -->
 <div class="modal-overlay" id="modal-excel">
   <div class="modal">
     <h3>📊 Exportar comentarios a Excel</h3>
-    <p style="font-size:13px;color:#555;margin-bottom:12px;">Se generará un archivo con la siguiente información:</p>
+    <p style="font-size:13px;color:#555;margin-bottom:12px;">Archivo <strong>.xlsx</strong> con las siguientes columnas:</p>
     <table>
       <thead><tr><th>#</th><th>Columna</th></tr></thead>
       <tbody>
@@ -582,33 +399,57 @@
   </div>
 </div>
 
-<!-- ─── TOAST ──────────────────────────────────────── -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════
-// DATOS DE EJEMPLO
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
+// DATOS — Proveedor de cartón con OC a múltiples fincas
+// ════════════════════════════════════════════════════════
 const OC_DATA = [
-  { id:1, dias:-45, finca:'Finca El Rosal', oc:'OC-12301', articulo:'Fertilizante NPK 50kg', codigo:'FERT-001', fechaPedido:'2026-02-01', fechaEntrega:'2026-03-10', cantPedida:500, cantPend:300, obs:'Pedido prioritario para temporada alta. Verificar disponibilidad inmediata.', urgente:true },
-  { id:2, dias:-31, finca:'Finca La Esperanza', oc:'OC-12315', articulo:'Fungicida Mancozeb 1kg', codigo:'FUNG-012', fechaPedido:'2026-02-15', fechaEntrega:'2026-03-24', cantPedida:200, cantPend:200, obs:'', urgente:false },
-  { id:3, dias:-22, finca:'Finca Los Pinos', oc:'OC-12328', articulo:'Herbicida Glifosato 20L', codigo:'HERB-005', fechaPedido:'2026-02-20', fechaEntrega:'2026-04-02', cantPedida:80, cantPend:80, obs:'Requiere ficha técnica adjunta con el despacho.', urgente:true },
-  { id:4, dias:-18, finca:'Finca Santa Clara', oc:'OC-12340', articulo:'Semilla Tomate Cherry x1000', codigo:'SEM-034', fechaPedido:'2026-03-01', fechaEntrega:'2026-04-06', cantPedida:50, cantPend:30, obs:'', urgente:false },
-  { id:5, dias:-9, finca:'Finca El Paraíso', oc:'OC-12355', articulo:'Insecticida Clorpirifos 1L', codigo:'INS-021', fechaPedido:'2026-03-10', fechaEntrega:'2026-04-15', cantPedida:120, cantPend:120, obs:'Control fitosanitario urgente en lote 3.', urgente:false },
-  { id:6, dias:-3, finca:'Finca Primavera', oc:'OC-12367', articulo:'Abono orgánico compostado 25kg', codigo:'ABON-008', fechaPedido:'2026-03-20', fechaEntrega:'2026-04-21', cantPedida:300, cantPend:150, obs:'', urgente:false },
-  { id:7, dias:2, finca:'Finca El Rosal', oc:'OC-12378', articulo:'Cal agrícola 40kg', codigo:'CAL-003', fechaPedido:'2026-03-25', fechaEntrega:'2026-04-29', cantPedida:600, cantPend:600, obs:'', urgente:false },
-  { id:8, dias:5, finca:'Finca La Esperanza', oc:'OC-12389', articulo:'Fosfato diamónico 50kg', codigo:'FERT-018', fechaPedido:'2026-03-28', fechaEntrega:'2026-05-02', cantPedida:200, cantPend:200, obs:'Coordinar con logística para despacho conjunto.', urgente:false },
-  { id:9, dias:12, finca:'Finca Los Pinos', oc:'OC-12401', articulo:'Manguera goteo 16mm x500m', codigo:'RIE-007', fechaPedido:'2026-04-01', fechaEntrega:'2026-05-09', cantPedida:10, cantPend:10, obs:'', urgente:false },
+  // ARTÍCULO 1: Caja de cartón corrugado → 8 fincas
+  { id:1,  grp:'CART-001', articulo:'Caja Cartón Corrugado Ref. C12', codigo:'CART-001', dias:-38, finca:'Finca El Rosal',       oc:'OC-12301', fechaPedido:'2026-02-10', fechaEntrega:'2026-03-17', cantPedida:2000, cantPend:2000, obs:'', urgente:true  },
+  { id:2,  grp:'CART-001', articulo:'Caja Cartón Corrugado Ref. C12', codigo:'CART-001', dias:-38, finca:'Finca La Esperanza',   oc:'OC-12302', fechaPedido:'2026-02-10', fechaEntrega:'2026-03-17', cantPedida:1500, cantPend:1500, obs:'', urgente:true  },
+  { id:3,  grp:'CART-001', articulo:'Caja Cartón Corrugado Ref. C12', codigo:'CART-001', dias:-38, finca:'Finca Los Pinos',      oc:'OC-12303', fechaPedido:'2026-02-10', fechaEntrega:'2026-03-17', cantPedida:1800, cantPend:800,  obs:'Entrega parcial recibida.', urgente:true  },
+  { id:4,  grp:'CART-001', articulo:'Caja Cartón Corrugado Ref. C12', codigo:'CART-001', dias:-38, finca:'Finca Santa Clara',    oc:'OC-12304', fechaPedido:'2026-02-10', fechaEntrega:'2026-03-17', cantPedida:900,  cantPend:900,  obs:'', urgente:false },
+  { id:5,  grp:'CART-001', articulo:'Caja Cartón Corrugado Ref. C12', codigo:'CART-001', dias:-38, finca:'Finca El Paraíso',     oc:'OC-12305', fechaPedido:'2026-02-10', fechaEntrega:'2026-03-17', cantPedida:1200, cantPend:1200, obs:'', urgente:false },
+  { id:6,  grp:'CART-001', articulo:'Caja Cartón Corrugado Ref. C12', codigo:'CART-001', dias:-38, finca:'Finca Primavera',      oc:'OC-12306', fechaPedido:'2026-02-10', fechaEntrega:'2026-03-17', cantPedida:600,  cantPend:600,  obs:'', urgente:false },
+  { id:7,  grp:'CART-001', articulo:'Caja Cartón Corrugado Ref. C12', codigo:'CART-001', dias:-38, finca:'Finca San Carlos',     oc:'OC-12307', fechaPedido:'2026-02-10', fechaEntrega:'2026-03-17', cantPedida:750,  cantPend:750,  obs:'', urgente:false },
+  { id:8,  grp:'CART-001', articulo:'Caja Cartón Corrugado Ref. C12', codigo:'CART-001', dias:-38, finca:'Finca Las Mercedes',   oc:'OC-12308', fechaPedido:'2026-02-10', fechaEntrega:'2026-03-17', cantPedida:400,  cantPend:400,  obs:'', urgente:false },
+
+  // ARTÍCULO 2: Lámina corrugada → 5 fincas, próximas a vencer
+  { id:9,  grp:'CART-002', articulo:'Lámina Corrugada Doble Cara', codigo:'CART-002', dias:-4, finca:'Finca El Rosal',       oc:'OC-12350', fechaPedido:'2026-03-15', fechaEntrega:'2026-04-22', cantPedida:500,  cantPend:500,  obs:'Pendiente confirmación de transporte.', urgente:false },
+  { id:10, grp:'CART-002', articulo:'Lámina Corrugada Doble Cara', codigo:'CART-002', dias:-4, finca:'Finca La Esperanza',   oc:'OC-12351', fechaPedido:'2026-03-15', fechaEntrega:'2026-04-22', cantPedida:400,  cantPend:400,  obs:'', urgente:false },
+  { id:11, grp:'CART-002', articulo:'Lámina Corrugada Doble Cara', codigo:'CART-002', dias:-4, finca:'Finca Los Pinos',      oc:'OC-12352', fechaPedido:'2026-03-15', fechaEntrega:'2026-04-22', cantPedida:350,  cantPend:350,  obs:'', urgente:false },
+  { id:12, grp:'CART-002', articulo:'Lámina Corrugada Doble Cara', codigo:'CART-002', dias:-4, finca:'Finca Santa Clara',    oc:'OC-12353', fechaPedido:'2026-03-15', fechaEntrega:'2026-04-22', cantPedida:280,  cantPend:280,  obs:'', urgente:false },
+  { id:13, grp:'CART-002', articulo:'Lámina Corrugada Doble Cara', codigo:'CART-002', dias:-4, finca:'Finca El Paraíso',     oc:'OC-12354', fechaPedido:'2026-03-15', fechaEntrega:'2026-04-22', cantPedida:320,  cantPend:320,  obs:'', urgente:false },
+
+  // ARTÍCULO 3: Esquinero cartón → 4 fincas, próximas
+  { id:14, grp:'CART-003', articulo:'Esquinero Cartón 35mm x 1.5m', codigo:'CART-003', dias:3, finca:'Finca Primavera',      oc:'OC-12380', fechaPedido:'2026-03-25', fechaEntrega:'2026-05-01', cantPedida:1000, cantPend:1000, obs:'', urgente:false },
+  { id:15, grp:'CART-003', articulo:'Esquinero Cartón 35mm x 1.5m', codigo:'CART-003', dias:3, finca:'Finca San Carlos',     oc:'OC-12381', fechaPedido:'2026-03-25', fechaEntrega:'2026-05-01', cantPedida:800,  cantPend:800,  obs:'', urgente:false },
+  { id:16, grp:'CART-003', articulo:'Esquinero Cartón 35mm x 1.5m', codigo:'CART-003', dias:3, finca:'Finca Las Mercedes',   oc:'OC-12382', fechaPedido:'2026-03-25', fechaEntrega:'2026-05-01', cantPedida:600,  cantPend:600,  obs:'', urgente:false },
+  { id:17, grp:'CART-003', articulo:'Esquinero Cartón 35mm x 1.5m', codigo:'CART-003', dias:3, finca:'Finca El Rosal',       oc:'OC-12383', fechaPedido:'2026-03-25', fechaEntrega:'2026-05-01', cantPedida:900,  cantPend:900,  obs:'', urgente:false },
+
+  // ARTÍCULO 4: Separador de cartón → 6 fincas, a tiempo
+  { id:18, grp:'CART-004', articulo:'Separador Cartón Alveolar',    codigo:'CART-004', dias:14, finca:'Finca El Rosal',       oc:'OC-12400', fechaPedido:'2026-04-01', fechaEntrega:'2026-05-12', cantPedida:5000, cantPend:5000, obs:'', urgente:false },
+  { id:19, grp:'CART-004', articulo:'Separador Cartón Alveolar',    codigo:'CART-004', dias:14, finca:'Finca La Esperanza',   oc:'OC-12401', fechaPedido:'2026-04-01', fechaEntrega:'2026-05-12', cantPedida:4000, cantPend:4000, obs:'', urgente:false },
+  { id:20, grp:'CART-004', articulo:'Separador Cartón Alveolar',    codigo:'CART-004', dias:14, finca:'Finca Los Pinos',      oc:'OC-12402', fechaPedido:'2026-04-01', fechaEntrega:'2026-05-12', cantPedida:3500, cantPend:3500, obs:'', urgente:false },
+  { id:21, grp:'CART-004', articulo:'Separador Cartón Alveolar',    codigo:'CART-004', dias:14, finca:'Finca Santa Clara',    oc:'OC-12403', fechaPedido:'2026-04-01', fechaEntrega:'2026-05-12', cantPedida:2000, cantPend:2000, obs:'', urgente:false },
+  { id:22, grp:'CART-004', articulo:'Separador Cartón Alveolar',    codigo:'CART-004', dias:14, finca:'Finca El Paraíso',     oc:'OC-12404', fechaPedido:'2026-04-01', fechaEntrega:'2026-05-12', cantPedida:2500, cantPend:2500, obs:'', urgente:false },
+  { id:23, grp:'CART-004', articulo:'Separador Cartón Alveolar',    codigo:'CART-004', dias:14, finca:'Finca Primavera',      oc:'OC-12405', fechaPedido:'2026-04-01', fechaEntrega:'2026-05-12', cantPedida:1800, cantPend:1800, obs:'', urgente:false },
 ];
 
-const comentariosGuardados = {};
-let selectedId = null;
-let activeFilter = 'todos';
-let searchTerm = '';
+// ════════════════════════════════════════════════════════
+// ESTADO
+// ════════════════════════════════════════════════════════
+const guardados    = {};
+let activeId       = null;   // OC activa (click en fila)
+let selected       = new Set(); // checkboxes marcados
+let activeFilter   = 'todos';
+let searchTerm     = '';
 
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
 // NAVEGACIÓN
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
 function goToInstructivo() {
   document.getElementById('page-login').classList.remove('active');
   document.getElementById('global-header').style.display = 'block';
@@ -621,237 +462,414 @@ function goToMain() {
   updateCounters();
 }
 function logout() {
-  document.getElementById('page-main').classList.remove('active');
-  document.getElementById('page-instructivo').classList.remove('active');
+  ['page-main','page-instructivo'].forEach(id => document.getElementById(id).classList.remove('active'));
   document.getElementById('global-header').style.display = 'none';
   document.getElementById('page-login').classList.add('active');
-  selectedId = null;
+  activeId = null; selected.clear();
 }
 
-// ════════════════════════════════════════════
-// LISTA DE OC
-// ════════════════════════════════════════════
-function getDaysClass(dias) {
-  if (dias < 0) return 'days-red';
-  if (dias <= 6) return 'days-orange';
-  return 'days-green';
-}
-function getIndClass(dias) {
-  if (dias < 0) return 'ind-red';
-  if (dias <= 6) return 'ind-orange';
-  return 'ind-green';
-}
+// ════════════════════════════════════════════════════════
+// UTILIDADES
+// ════════════════════════════════════════════════════════
+function daysClass(d) { return d < 0 ? 'days-red' : d <= 6 ? 'days-orange' : 'days-green'; }
+function indClass(d)  { return d < 0 ? 'ind-red'  : d <= 6 ? 'ind-orange'  : 'ind-green';  }
+function daysLabel(d) { return d < 0 ? `${d}d` : `+${d}d`; }
 
-function filteredData() {
-  return OC_DATA.filter(oc => {
-    const matchFilter =
-      activeFilter === 'todos' ? true :
-      activeFilter === 'vencidos' ? oc.dias < 0 :
-      activeFilter === 'proximos' ? (oc.dias >= 0 && oc.dias <= 6) :
-      activeFilter === 'urgentes' ? oc.urgente : true;
+function filtered() {
+  return OC_DATA.filter(o => {
+    const ok =
+      activeFilter === 'todos'    ? true :
+      activeFilter === 'vencidos' ? o.dias < 0 :
+      activeFilter === 'proximos' ? (o.dias >= 0 && o.dias <= 6) :
+      activeFilter === 'urgentes' ? o.urgente : true;
     const q = searchTerm.toLowerCase();
-    const matchSearch = !q ||
-      oc.oc.toLowerCase().includes(q) ||
-      oc.articulo.toLowerCase().includes(q) ||
-      oc.finca.toLowerCase().includes(q);
-    return matchFilter && matchSearch;
+    return ok && (!q || o.oc.toLowerCase().includes(q) ||
+                        o.articulo.toLowerCase().includes(q) ||
+                        o.finca.toLowerCase().includes(q) ||
+                        o.codigo.toLowerCase().includes(q));
   });
 }
 
+function groups(data) {
+  const map = new Map();
+  data.forEach(o => {
+    if (!map.has(o.grp)) map.set(o.grp, []);
+    map.get(o.grp).push(o);
+  });
+  // ordenar grupos por días más vencidos
+  return [...map.entries()].sort((a,b) => Math.min(...a[1].map(x=>x.dias)) - Math.min(...b[1].map(x=>x.dias)));
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER LISTA
+// ════════════════════════════════════════════════════════
 function renderList() {
-  const list = document.getElementById('oc-list');
-  const data = filteredData().sort((a,b) => a.dias - b.dias);
+  const data = filtered();
+  const el   = document.getElementById('oc-list');
   if (!data.length) {
-    list.innerHTML = '<div class="empty-state" style="padding:40px 20px;"><div class="empty-icon">🔍</div><p>Sin resultados</p></div>';
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><p>Sin resultados</p></div>';
     return;
   }
-  list.innerHTML = data.map(oc => {
-    const dc = getDaysClass(oc.dias);
-    const label = oc.dias < 0 ? `${oc.dias}d` : `+${oc.dias}d`;
-    const comentado = comentariosGuardados[oc.id];
+  const grps = groups(data);
+  el.innerHTML = grps.map(([grpKey, items]) => {
+    const minDias  = Math.min(...items.map(o => o.dias));
+    const maxDias  = Math.max(...items.map(o => o.dias));
+    const hasUrg   = items.some(o => o.urgente);
+    const allSel   = items.every(o => selected.has(o.id));
+    const someSel  = items.some(o => selected.has(o.id));
+    const dc       = daysClass(minDias);
+    const badgeCls = minDias < 0 ? 'danger' : minDias <= 6 ? 'warn' : '';
+    const diasText = minDias === maxDias ? daysLabel(minDias) : `${daysLabel(minDias)} a ${daysLabel(maxDias)}`;
+    const totalPend = items.reduce((s,o) => s + o.cantPend, 0);
+    const totalComentadas = items.filter(o => guardados[o.id]).length;
+
     return `
-    <div class="oc-item ${selectedId===oc.id?'selected':''}" onclick="selectOC(${oc.id})">
-      <div class="oc-days ${dc}">${label}<small>días</small></div>
-      <div class="oc-info">
-        <div class="oc-finca">${oc.finca}</div>
-        <div class="oc-num">${oc.oc}</div>
-        <div class="oc-art">${oc.articulo}</div>
-        <div>
-          ${oc.urgente ? '<span class="badge-urgente">URGENTE</span>' : ''}
-          ${comentado ? '<span class="badge-comentado">✓ Comentado</span>' : ''}
+    <div class="art-group" id="grp-${grpKey}">
+      <div class="art-group-header" onclick="toggleGroup('${grpKey}')">
+        <div class="art-group-left">
+          <span class="art-group-icon" id="icon-${grpKey}">▼</span>
+          <div>
+            <div class="art-group-name">${items[0].articulo}</div>
+            <div class="art-group-code">${grpKey}</div>
+          </div>
         </div>
+        <div class="art-group-right">
+          ${hasUrg ? '<span class="tag tag-urgente">URGENTE</span>' : ''}
+          <span class="art-group-badge ${badgeCls}">${diasText}</span>
+          <span class="art-group-badge" style="background:#555;">${items.length} fincas</span>
+          ${totalComentadas > 0 ? `<span class="art-group-badge" style="background:#2E7D32;">${totalComentadas}/${items.length} ✓</span>` : ''}
+          <button class="btn-sel-group" onclick="event.stopPropagation(); selectGroup('${grpKey}', ${!allSel})">${allSel ? 'Desmarcar' : 'Seleccionar grupo'}</button>
+        </div>
+      </div>
+      <div class="art-group-items" id="items-${grpKey}">
+        ${items.sort((a,b)=>a.dias-b.dias).map(o => {
+          const isSel = selected.has(o.id);
+          const isAct = activeId === o.id;
+          const sv    = guardados[o.id];
+          return `
+          <div class="oc-item ${isAct?'active':''} ${isSel?'checked':''}" id="row-${o.id}">
+            <input type="checkbox" class="oc-cb" ${isSel?'checked':''} onclick="event.stopPropagation(); toggleSel(${o.id})" title="Seleccionar para comentario conjunto">
+            <div class="oc-days ${daysClass(o.dias)}">${daysLabel(o.dias)}<small>días</small></div>
+            <div class="oc-info" onclick="clickRow(${o.id})">
+              <div class="oc-finca">${o.finca}</div>
+              <div class="oc-num">${o.oc} · ${o.cantPend.toLocaleString()} und. pend.</div>
+              <div class="oc-tags">
+                ${o.urgente ? '<span class="tag tag-urgente">⚡ URGENTE</span>' : ''}
+                ${sv ? '<span class="tag tag-comentado">✓ Comentado</span>' : ''}
+                ${o.obs ? '<span class="tag tag-cant">📌 Obs.</span>' : ''}
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
   }).join('');
+  updateMultiBar();
 }
 
-function updateCounters() {
-  document.getElementById('count-vencidos').textContent = OC_DATA.filter(o=>o.dias<0).length;
-  document.getElementById('count-proximos').textContent = OC_DATA.filter(o=>o.dias>=0&&o.dias<=6).length;
-  document.getElementById('count-urgentes').textContent = OC_DATA.filter(o=>o.urgente).length;
-  document.getElementById('count-total').textContent = OC_DATA.length;
+const collapsedGroups = new Set();
+function toggleGroup(key) {
+  const items = document.getElementById('items-'+key);
+  const icon  = document.getElementById('icon-'+key);
+  if (!items) return;
+  if (collapsedGroups.has(key)) {
+    collapsedGroups.delete(key);
+    items.classList.remove('collapsed');
+    icon.classList.remove('collapsed');
+  } else {
+    collapsedGroups.add(key);
+    items.classList.add('collapsed');
+    icon.classList.add('collapsed');
+  }
 }
 
-function filterList(val) {
-  searchTerm = val;
+// ════════════════════════════════════════════════════════
+// SELECCIÓN
+// ════════════════════════════════════════════════════════
+function toggleSel(id) {
+  if (selected.has(id)) selected.delete(id);
+  else selected.add(id);
+  updateMultiBar();
   renderList();
+  renderRight();
 }
 
-function setFilter(f, btn) {
-  activeFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+function selectGroup(grpKey, doSelect) {
+  OC_DATA.filter(o => o.grp === grpKey).forEach(o => {
+    if (doSelect) selected.add(o.id);
+    else selected.delete(o.id);
+  });
+  updateMultiBar();
   renderList();
+  renderRight();
 }
 
-// ════════════════════════════════════════════
-// SELECCIÓN DE OC
-// ════════════════════════════════════════════
-function selectOC(id) {
-  selectedId = id;
-  const oc = OC_DATA.find(o=>o.id===id);
+function clearSelection() {
+  selected.clear();
+  updateMultiBar();
   renderList();
-  renderIndicator(oc);
-  renderDetail(oc);
+  renderRight();
 }
 
-function renderIndicator(oc) {
-  const ic = getIndClass(oc.dias);
-  const label = oc.dias < 0 ? `${oc.dias}` : `+${oc.dias}`;
-  document.getElementById('panel-indicator').innerHTML = `
-    <div class="indicator-box ${ic}">
-      <div class="ind-num">${label}</div>
+function updateMultiBar() {
+  const bar = document.getElementById('multi-bar');
+  document.getElementById('sel-count').textContent = selected.size;
+  bar.classList.toggle('visible', selected.size > 0);
+}
+
+// ════════════════════════════════════════════════════════
+// CLICK EN FILA (detalle individual)
+// ════════════════════════════════════════════════════════
+function clickRow(id) {
+  activeId = (activeId === id && selected.size === 0) ? null : id;
+  renderList();
+  renderRight();
+}
+
+// ════════════════════════════════════════════════════════
+// PANEL DERECHO
+// ════════════════════════════════════════════════════════
+function renderRight() {
+  const pr = document.getElementById('panel-right');
+
+  // Si hay selección múltiple: modo bulk
+  if (selected.size > 0) {
+    renderMulti(pr);
+    return;
+  }
+  // Si hay una OC activa: detalle individual
+  if (activeId !== null) {
+    const o = OC_DATA.find(x => x.id === activeId);
+    if (o) { renderSingle(pr, o); return; }
+  }
+  // Vacío
+  pr.innerHTML = `<div class="empty-state"><div class="empty-icon">📦</div><p style="font-size:13px;">Selecciona una OC para ver el detalle<br>o marca checkboxes para comentar varias a la vez</p></div>`;
+}
+
+// ── Detalle individual ────────────────────────────────
+function renderSingle(pr, o) {
+  const sv = guardados[o.id] || {};
+  pr.innerHTML = `
+  <!-- Indicador -->
+  <div class="indicator-row">
+    <div class="ind-box ${indClass(o.dias)}">
+      <div class="ind-num">${o.dias < 0 ? o.dias : '+'+o.dias}</div>
       <div class="ind-label">días vs<br>fecha OC</div>
     </div>
-    <div class="indicator-meta">
-      <h3>${oc.oc} — ${oc.finca}</h3>
-      <p>${oc.articulo}</p>
-      <p style="margin-top:4px; color:#888; font-size:11px;">Fecha de entrega comprometida: <strong>${oc.fechaEntrega}</strong></p>
-      ${oc.urgente ? '<span class="tag-urgente">⚡ URGENTE</span>' : ''}
-    </div>`;
-}
+    <div class="ind-meta" style="flex:1;">
+      <h3>${o.oc} — ${o.finca}</h3>
+      <p>${o.articulo} · ${o.codigo}</p>
+      <p style="font-size:11px;color:#999;margin-top:4px;">Fecha entrega comprometida: <strong>${o.fechaEntrega}</strong></p>
+      ${o.urgente ? '<span style="display:inline-block;margin-top:6px;background:#B71C1C;color:#fff;padding:2px 10px;border-radius:4px;font-size:11px;font-weight:700;">⚡ PEDIDO URGENTE</span>' : ''}
+    </div>
+  </div>
 
-function renderDetail(oc) {
-  const saved = comentariosGuardados[oc.id] || {};
-  document.getElementById('panel-right').innerHTML = `
-    <div class="panel-card">
-      <div class="panel-card-header">
-        <div class="dot-panel" style="background:#1565C0;"></div>
-        Panel 3 — Detalle del pedido (solo lectura)
-      </div>
-      <div class="panel-card-body">
-        <div class="detail-grid">
-          <div class="detail-field"><label>Fuente / Finca</label><span>${oc.finca}</span></div>
-          <div class="detail-field"><label>Documento OC</label><span style="font-weight:700;color:#1B5E20;">${oc.oc}</span></div>
-          <div class="detail-field"><label>Código artículo</label><span>${oc.codigo}</span></div>
-          <div class="detail-field"><label>Descripción</label><span>${oc.articulo}</span></div>
-          <div class="detail-field"><label>Fecha de pedido</label><span>${oc.fechaPedido}</span></div>
-          <div class="detail-field"><label>Fecha de entrega OC</label><span style="color:${oc.dias<0?'#C62828':'#1B5E20'};font-weight:600;">${oc.fechaEntrega}</span></div>
-          <div class="detail-field"><label>Cantidad pedida</label><span>${oc.cantPedida.toLocaleString()} und.</span></div>
-          <div class="detail-field"><label>Cantidad pendiente</label><span style="font-weight:700;">${oc.cantPend.toLocaleString()} und.</span></div>
-          ${oc.obs ? `<div class="detail-field full"><label>Observaciones del área de compras</label><div class="detail-obs">${oc.obs}</div></div>` : ''}
-        </div>
+  <!-- Panel 3 -->
+  <div class="panel-card">
+    <div class="panel-card-header">
+      <div class="dot-panel" style="background:#1565C0;"></div>
+      Panel 3 — Detalle del pedido
+      <span style="font-size:10px;font-weight:400;background:#e0e0e0;border-radius:10px;padding:1px 8px;margin-left:4px;">Solo lectura</span>
+    </div>
+    <div class="panel-card-body" style="padding:0;">
+      <div class="detail-grid">
+        <div class="detail-field"><label>Fuente / Finca</label><span>${o.finca}</span></div>
+        <div class="detail-field"><label>Documento OC</label><span style="font-weight:700;color:#1B5E20;">${o.oc}</span></div>
+        <div class="detail-field"><label>Código artículo</label><span>${o.codigo}</span></div>
+        <div class="detail-field"><label>Descripción</label><span>${o.articulo}</span></div>
+        <div class="detail-field"><label>Fecha de pedido</label><span>${o.fechaPedido}</span></div>
+        <div class="detail-field"><label>Fecha de entrega OC</label><span style="color:${o.dias<0?'#C62828':'#2E7D32'};font-weight:600;">${o.fechaEntrega}</span></div>
+        <div class="detail-field"><label>Cantidad pedida</label><span>${o.cantPedida.toLocaleString()} und.</span></div>
+        <div class="detail-field"><label>Cantidad pendiente</label><span style="font-weight:700;">${o.cantPend.toLocaleString()} und.</span></div>
+        ${o.obs ? `<div class="detail-field full"><label>Observaciones del área de compras</label><div class="detail-obs">${o.obs}</div></div>` : ''}
       </div>
     </div>
+  </div>
 
-    <div class="panel-card">
-      <div class="panel-card-header">
-        <div class="dot-panel" style="background:#7B1FA2;"></div>
-        Panel 4 — Comentario del proveedor
-        ${saved.texto ? '<span style="margin-left:auto;font-size:11px;font-weight:400;color:#2E7D32;">✓ Guardado el '+saved.fecha+'</span>' : ''}
-      </div>
-      <div class="panel-card-body">
-        <div class="form-row">
-          <label>Comentario <span class="req">*</span></label>
-          <textarea id="txt-comentario" placeholder="Describe el estado del pedido, motivo de atraso, novedades logísticas o de producción…">${saved.texto||''}</textarea>
-        </div>
-        <div class="form-two-col">
-          <div class="form-row">
-            <label>Fecha compromiso de entrega</label>
-            <input type="date" id="inp-fecha" value="${saved.fechaCompromiso||''}">
-          </div>
-          <div class="form-row">
-            <label>N° Guía / Remisión</label>
-            <input type="text" id="inp-guia" placeholder="Ej: 00123456" value="${saved.guia||''}">
-          </div>
-        </div>
-        <div class="form-row">
-          <label>Adjuntar documentos (PDF, PNG, JPG, Excel · máx. 10 MB)</label>
-          <div class="upload-area" onclick="document.getElementById('file-input').click()">
-            <div class="upload-icon">📎</div>
-            <div>Haz clic aquí para adjuntar un archivo</div>
-            <div style="font-size:11px;margin-top:4px;">Facturas, guías, remisiones, fotos, certificados</div>
-          </div>
-          <input type="file" id="file-input" style="display:none" multiple accept=".pdf,.png,.jpg,.jpeg,.xlsx,.docx" onchange="addFiles(this)">
-          <div class="file-list" id="file-list">
-            ${(saved.archivos||[]).map(f=>`
-              <div class="file-item">
-                <span>📄 ${f}</span>
-                <span class="file-remove" onclick="removeFile(this,'${f}')">✕</span>
-              </div>`).join('')}
-          </div>
-        </div>
-        <div class="form-footer">
-          <span class="save-note">⚠️ Debes presionar Guardar para registrar tu comentario</span>
-          <button class="btn-save" onclick="guardarComentario(${oc.id})">💾 Guardar</button>
-        </div>
-      </div>
-    </div>`;
+  <!-- Panel 4 -->
+  ${renderCommentForm([o.id], sv)}`;
 }
 
+// ── Multi-selección ───────────────────────────────────
+function renderMulti(pr) {
+  const ids   = [...selected];
+  const items = ids.map(id => OC_DATA.find(o => o.id === id)).filter(Boolean);
+  const articulos = [...new Set(items.map(o => o.articulo))];
+  const totalPend = items.reduce((s,o) => s + o.cantPend, 0);
+  const minDias   = Math.min(...items.map(o => o.dias));
+
+  pr.innerHTML = `
+  <!-- Indicador multi -->
+  <div class="indicator-row">
+    <div class="ind-box ${indClass(minDias)}">
+      <div class="ind-num">${ids.length}</div>
+      <div class="ind-label">OC<br>selec.</div>
+    </div>
+    <div class="ind-meta" style="flex:1;">
+      <h3>Comentario conjunto — ${ids.length} órdenes de compra</h3>
+      <p>${articulos.length === 1 ? articulos[0] : articulos.length + ' artículos diferentes'}</p>
+      <p style="font-size:11px;color:#999;margin-top:4px;">Total pendiente: <strong>${totalPend.toLocaleString()} und.</strong> · ${[...new Set(items.map(o=>o.finca))].length} fincas</p>
+    </div>
+  </div>
+
+  <!-- Panel 3 multi: tabla resumen -->
+  <div class="panel-card">
+    <div class="panel-card-header">
+      <div class="dot-panel" style="background:#1565C0;"></div>
+      Panel 3 — OC seleccionadas
+      <span style="font-size:11px;font-weight:400;color:#555;margin-left:auto;">El comentario se aplicará a todas</span>
+    </div>
+    <div class="panel-card-body" style="padding:12px 16px 16px;">
+      <div class="multi-summary">
+        <div class="multi-summary-item"><strong>${ids.length}</strong><span>órdenes de compra</span></div>
+        <div class="multi-summary-item"><strong>${[...new Set(items.map(o=>o.finca))].length}</strong><span>fincas destino</span></div>
+        <div class="multi-summary-item"><strong>${totalPend.toLocaleString()}</strong><span>und. pendientes</span></div>
+        <div class="multi-summary-item"><strong>${articulos.length}</strong><span>artículo(s)</span></div>
+      </div>
+      <table class="multi-table">
+        <thead><tr><th>OC</th><th>Finca destino</th><th>Artículo</th><th>Días</th><th>Pend.</th><th></th></tr></thead>
+        <tbody>
+          ${items.sort((a,b)=>a.dias-b.dias).map(o => `
+          <tr>
+            <td style="font-weight:700;color:#1B5E20;">${o.oc}</td>
+            <td>${o.finca}</td>
+            <td style="color:#555;">${o.codigo}</td>
+            <td><span style="font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;" class="${daysClass(o.dias)}">${daysLabel(o.dias)}</span></td>
+            <td style="font-weight:600;">${o.cantPend.toLocaleString()}</td>
+            <td><button class="multi-remove" onclick="toggleSel(${o.id})" title="Quitar de selección">✕</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Panel 4 bulk -->
+  ${renderCommentForm(ids, {})}`;
+}
+
+// ── Formulario de comentario (single o bulk) ──────────
+function renderCommentForm(ids, saved) {
+  const isBulk  = ids.length > 1;
+  const hasSaved = saved && saved.texto;
+  return `
+  <div class="panel-card">
+    <div class="panel-card-header">
+      <div class="dot-panel" style="background:#7B1FA2;"></div>
+      Panel 4 — ${isBulk ? `Comentario para ${ids.length} OC` : 'Comentario del proveedor'}
+      ${hasSaved ? `<span style="margin-left:auto;font-size:11px;font-weight:400;color:#2E7D32;">✓ Guardado el ${saved.fecha}</span>` : ''}
+    </div>
+    <div class="panel-card-body">
+      ${isBulk ? `
+      <div class="affected-banner">
+        <strong>${ids.length}</strong>
+        <span>Este comentario y fecha compromiso se guardarán en <strong>todas las órdenes seleccionadas</strong></span>
+      </div>` : ''}
+      <div class="form-row">
+        <label>Comentario <span class="req">*</span></label>
+        <textarea id="txt-comentario" placeholder="Describe el estado, motivo de atraso, novedades logísticas o de producción…">${saved.texto||''}</textarea>
+      </div>
+      <div class="form-two-col">
+        <div class="form-row">
+          <label>Fecha compromiso de entrega</label>
+          <input type="date" id="inp-fecha" value="${saved.fechaCompromiso||''}">
+        </div>
+        <div class="form-row">
+          <label>N° Guía / Remisión</label>
+          <input type="text" id="inp-guia" placeholder="Ej: 00123456" value="${saved.guia||''}">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Adjuntar documentos (PDF, PNG, JPG, Excel · máx. 10 MB)</label>
+        <div class="upload-area" onclick="document.getElementById('file-input').click()">
+          <div class="upload-icon">📎</div>
+          <div>Haz clic para adjuntar un archivo</div>
+          <div style="font-size:11px;margin-top:3px;color:#aaa;">Facturas · Guías · Remisiones · Fotos · Certificados</div>
+        </div>
+        <input type="file" id="file-input" style="display:none" multiple accept=".pdf,.png,.jpg,.jpeg,.xlsx,.docx" onchange="addFiles(this)">
+        <div class="file-list" id="file-list">
+          ${(saved.archivos||[]).map(f=>`<div class="file-item"><span>📄 ${f}</span><span class="file-remove" onclick="this.parentElement.remove()">✕</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="form-footer">
+        <span class="save-note">⚠️ Debes presionar Guardar para registrar</span>
+        <button class="btn-save" onclick="guardar(${JSON.stringify(ids)})">
+          💾 ${isBulk ? `Guardar en ${ids.length} OC` : 'Guardar'}
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// GUARDAR
+// ════════════════════════════════════════════════════════
 function addFiles(input) {
   const list = document.getElementById('file-list');
   Array.from(input.files).forEach(f => {
-    const item = document.createElement('div');
-    item.className = 'file-item';
-    item.innerHTML = `<span>📄 ${f.name}</span><span class="file-remove" onclick="this.parentElement.remove()">✕</span>`;
-    list.appendChild(item);
+    const d = document.createElement('div');
+    d.className = 'file-item';
+    d.innerHTML = `<span>📄 ${f.name}</span><span class="file-remove" onclick="this.parentElement.remove()">✕</span>`;
+    list.appendChild(d);
   });
   input.value = '';
 }
 
-function removeFile(el) { el.parentElement.remove(); }
-
-function guardarComentario(id) {
+function guardar(ids) {
   const texto = document.getElementById('txt-comentario').value.trim();
   if (!texto || texto.length < 10) {
     showToast('⚠️ El comentario debe tener al menos 10 caracteres.', '#E65100');
     return;
   }
-  const fecha = document.getElementById('inp-fecha').value;
-  const guia = document.getElementById('inp-guia').value;
-  const archivos = Array.from(document.querySelectorAll('#file-list .file-item span:first-child'))
-    .map(s => s.textContent.replace('📄 ',''));
-  const ahora = new Date().toLocaleString('es-CO', {dateStyle:'short', timeStyle:'short'});
+  const fecha    = document.getElementById('inp-fecha').value;
+  const guia     = document.getElementById('inp-guia').value;
+  const archivos = [...document.querySelectorAll('#file-list .file-item span:first-child')].map(s=>s.textContent.replace('📄 ',''));
+  const ahora    = new Date().toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'});
 
-  comentariosGuardados[id] = { texto, fechaCompromiso: fecha, guia, archivos, fecha: ahora };
+  ids.forEach(id => {
+    guardados[id] = { texto, fechaCompromiso: fecha, guia, archivos, fecha: ahora };
+  });
 
-  showToast('✅ Comentario guardado. El comprador asignado fue notificado por correo.', '#1B5E20');
+  const msg = ids.length > 1
+    ? `✅ Comentario guardado en ${ids.length} OC. Los compradores asignados fueron notificados.`
+    : `✅ Comentario guardado. El comprador asignado fue notificado por correo.`;
+  showToast(msg, '#1B5E20');
+
+  if (ids.length > 1) { selected.clear(); updateMultiBar(); }
   renderList();
-  const oc = OC_DATA.find(o=>o.id===id);
-  renderDetail(oc);
+  if (ids.length === 1) { const o = OC_DATA.find(x=>x.id===ids[0]); if(o) renderSingle(document.getElementById('panel-right'), o); }
+  else renderRight();
 }
 
-// ════════════════════════════════════════════
-// TOAST
-// ════════════════════════════════════════════
-function showToast(msg, color = '#1B5E20') {
+// ════════════════════════════════════════════════════════
+// FILTROS Y CONTADORES
+// ════════════════════════════════════════════════════════
+function filterList(val) { searchTerm = val; renderList(); }
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderList();
+}
+function updateCounters() {
+  document.getElementById('c-venc').textContent = OC_DATA.filter(o=>o.dias<0).length;
+  document.getElementById('c-prox').textContent = OC_DATA.filter(o=>o.dias>=0&&o.dias<=6).length;
+  document.getElementById('c-urg').textContent  = OC_DATA.filter(o=>o.urgente).length;
+  document.getElementById('c-tot').textContent  = OC_DATA.length;
+  document.getElementById('c-art').textContent  = new Set(OC_DATA.map(o=>o.grp)).size;
+}
+
+// ════════════════════════════════════════════════════════
+// TOAST / MODAL
+// ════════════════════════════════════════════════════════
+function showToast(msg, color='#1B5E20') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = color;
+  t.textContent = msg; t.style.background = color;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4000);
+  setTimeout(()=>t.classList.remove('show'), 4500);
 }
-
-// ════════════════════════════════════════════
-// MODAL EXCEL
-// ════════════════════════════════════════════
-function showModal() { document.getElementById('modal-excel').classList.add('show'); }
-function hideModal() { document.getElementById('modal-excel').classList.remove('show'); }
-function downloadExcel() {
-  hideModal();
-  showToast('📊 Archivo Excel generado y descargado correctamente.');
-}
+function showModal()    { document.getElementById('modal-excel').classList.add('show'); }
+function hideModal()    { document.getElementById('modal-excel').classList.remove('show'); }
+function downloadExcel(){ hideModal(); showToast('📊 Archivo Excel generado y descargado correctamente.'); }
 </script>
 </body>
 </html>
