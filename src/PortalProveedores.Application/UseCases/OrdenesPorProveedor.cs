@@ -1,9 +1,11 @@
 using PortalProveedores.Application.DTOs;
+using PortalProveedores.Application.Interfaces;
 using PortalProveedores.Domain.Interfaces;
 
 namespace PortalProveedores.Application.UseCases;
 
-public class OrdenesPorProveedor(IOrdenCompraRepository ocRepo, IComentarioRepository comentarioRepo)
+// Fix #6: implements IOrdenesPorProveedor so Controller depends on the interface, not the class
+public class OrdenesPorProveedor(IOrdenCompraRepository ocRepo, IComentarioRepository comentarioRepo) : IOrdenesPorProveedor
 {
     public async Task<IEnumerable<OrdenCompraDto>> ExecuteAsync(string nit)
     {

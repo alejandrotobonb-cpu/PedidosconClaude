@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
+using PortalProveedores.Application.Interfaces;
 using PortalProveedores.Application.UseCases;
 using PortalProveedores.Domain.Interfaces;
 using PortalProveedores.Infrastructure.Persistence;
@@ -19,9 +20,9 @@ builder.Services.AddScoped<IOrdenCompraRepository, OrdenCompraRepository>();
 builder.Services.AddScoped<IComentarioRepository, ComentarioRepository>();
 builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
 
-// Use cases
-builder.Services.AddScoped<OrdenesPorProveedor>();
-builder.Services.AddScoped<GuardarComentario>();
+// Use cases — registered via interface so Controller depends on abstraction, not implementation
+builder.Services.AddScoped<IOrdenesPorProveedor, OrdenesPorProveedor>();
+builder.Services.AddScoped<IGuardarComentario, GuardarComentario>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

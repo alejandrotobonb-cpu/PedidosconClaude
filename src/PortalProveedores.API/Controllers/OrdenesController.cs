@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortalProveedores.Application.DTOs;
-using PortalProveedores.Application.UseCases;
+using PortalProveedores.Application.Interfaces;
 using PortalProveedores.Domain.Interfaces;
 
 namespace PortalProveedores.API.Controllers;
@@ -9,9 +9,10 @@ namespace PortalProveedores.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
+// Fix #6: inject Application interfaces, not concrete classes
 public class OrdenesController(
-    OrdenesPorProveedor ordenesPorProveedor,
-    GuardarComentario guardarComentario,
+    IOrdenesPorProveedor ordenesPorProveedor,
+    IGuardarComentario guardarComentario,
     IProveedorRepository proveedorRepo) : ControllerBase
 {
     [HttpGet]

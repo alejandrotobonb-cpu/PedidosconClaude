@@ -14,6 +14,15 @@ public class ComentarioRepository(AppDbContext db) : IComentarioRepository
         return comentario;
     }
 
+    // Fix #3: single round-trip for bulk inserts instead of N SaveChangesAsync calls
+    public async Task<IEnumerable<Comentario>> AddRangeAsync(IEnumerable<Comentario> comentarios)
+    {
+        var lista = comentarios.ToList();
+        db.Comentarios.AddRange(lista);
+        await db.SaveChangesAsync();
+        return lista;
+    }
+
     public async Task<IEnumerable<Comentario>> GetByOrdenCompraIdAsync(int ordenCompraId) =>
         await db.Comentarios
             .Where(c => c.OrdenCompraId == ordenCompraId)

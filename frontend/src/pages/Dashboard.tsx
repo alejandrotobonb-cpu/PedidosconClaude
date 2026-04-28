@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { getMisOrdenes } from "../api/ordenesApi";
-import { OrdenCompraDto, ArticuloGroup } from "../types";
+import type { OrdenCompraDto, ArticuloGroup } from "../types";
 import OcList from "../components/OcList";
 import ComentarioPanel from "../components/ComentarioPanel";
 import { useApiToken } from "../hooks/useApiToken";
@@ -28,29 +28,30 @@ export default function Dashboard() {
 
   const [ordenes, setOrdenes] = useState<OrdenCompraDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<number | null>(null);
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
-  const load = async () => {
+  const load = useCallback(async () => {
+    setError(null);
     try {
       const data = await getMisOrdenes();
       setOrdenes(data);
+    } catch {
+      setError("No se pudieron cargar los pedidos. Intente de nuevo.");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [load]);
 
   const groups = useMemo(() => buildGroups(ordenes), [ordenes]);
 
   const activeOc = ordenes.find(o => o.id === activeId) ?? null;
   const selectedOcs = ordenes.filter(o => selected.has(o.id));
 
-  const handleClickRow = (id: number) => {
-    setActiveId(id);
-    if (selected.size === 0) setSelected(new Set());
-  };
+  const handleClickRow = (id: number) => setActiveId(id);
 
   const handleToggleSel = (id: number) => {
     setSelected(prev => {
@@ -60,12 +61,13 @@ export default function Dashboard() {
     });
   };
 
+  // Fix #1: was clearing ALL groups when deselecting; now toggles only the passed group's IDs
   const handleSelectGroup = (ids: number[]) => {
     setSelected(prev => {
       const next = new Set(prev);
-      if (ids.length === 0) {
-        // desmarcar grupo: quitar todos los que ya estaban
-        groups.flatMap(g => g.ordenes.map(o => o.id)).forEach(id => next.delete(id));
+      const allInGroup = ids.every(id => next.has(id));
+      if (allInGroup) {
+        ids.forEach(id => next.delete(id));
       } else {
         ids.forEach(id => next.add(id));
       }
@@ -78,6 +80,21 @@ export default function Dashboard() {
   const comentadas = ordenes.filter(o => o.ultimoComentario).length;
 
   if (loading) return <div className="loading">Cargando pedidos…</div>;
+
+  // Fix #2: show actionable error instead of blank screen when API fails
+  if (error) return (
+    <div className="loading" style={{ flexDirection: "column", gap: 12, color: "#C62828" }}>
+      <span style={{ fontSize: 40 }}>⚠️</span>
+      <span>{error}</span>
+      <button
+        className="btn-save"
+        style={{ width: "auto", padding: "8px 20px" }}
+        onClick={() => { setLoading(true); load(); }}
+      >
+        Reintentar
+      </button>
+    </div>
+  );
 
   return (
     <>

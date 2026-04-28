@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { MsalProvider, AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from "./auth/msalConfig";
@@ -9,6 +10,15 @@ import "./App.css";
 const msalInstance = new PublicClientApplication(msalConfig);
 
 export default function App() {
+  const [ready, setReady] = useState(false);
+
+  // Fix #8: MSAL v3+ requires initialize() before any auth operations
+  useEffect(() => {
+    msalInstance.initialize().then(() => setReady(true));
+  }, []);
+
+  if (!ready) return null;
+
   return (
     <MsalProvider instance={msalInstance}>
       <UnauthenticatedTemplate>

@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { ArticuloGroup, OrdenCompraDto } from "../types";
+import { useState, useMemo } from "react";
+import type { ArticuloGroup } from "../types";
+
+type Filter = "all" | "vencidas" | "proximas" | "urgentes";
 
 interface Props {
   groups: ArticuloGroup[];
@@ -10,6 +12,13 @@ interface Props {
   onSelectGroup: (ids: number[]) => void;
   onClearSel: () => void;
 }
+
+const FILTER_LABELS: [Filter, string][] = [
+  ["all", "Todos"],
+  ["vencidas", "Vencidos"],
+  ["proximas", "≤ 6 días"],
+  ["urgentes", "Urgentes"],
+];
 
 function daysClass(d: number) {
   if (d < 0) return "days-red";
@@ -23,6 +32,8 @@ function daysLabel(d: number) {
 
 export default function OcList({ groups, activeId, selected, onClickRow, onToggleSel, onSelectGroup, onClearSel }: Props) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<Filter>("all");
 
   const toggleGroup = (key: string) =>
     setCollapsed(prev => {
@@ -31,13 +42,50 @@ export default function OcList({ groups, activeId, selected, onClickRow, onToggl
       return next;
     });
 
-  const allGroupIds = (ordenes: OrdenCompraDto[]) => ordenes.map(o => o.id);
+  // Fix #9: search and filter applied here; parent groups prop is unchanged
+  const visibleGroups = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    return groups
+      .map(g => ({
+        ...g,
+        ordenes: g.ordenes.filter(o => {
+          const matchFilter =
+            filter === "all" ||
+            (filter === "vencidas" && o.diasVencimiento < 0) ||
+            (filter === "proximas" && o.diasVencimiento >= 0 && o.diasVencimiento <= 6) ||
+            (filter === "urgentes" && o.urgente);
+          const matchSearch =
+            !q ||
+            o.articulo.toLowerCase().includes(q) ||
+            o.finca.toLowerCase().includes(q) ||
+            o.numeroOC.toLowerCase().includes(q);
+          return matchFilter && matchSearch;
+        }),
+      }))
+      .filter(g => g.ordenes.length > 0);
+  }, [groups, search, filter]);
 
   return (
     <div className="panel-list">
       <div className="panel-list-header">
         <div className="panel-list-header-title">Pedidos Pendientes</div>
-        <input className="search-input" placeholder="🔍 Buscar artículo, finca, OC…" readOnly />
+        <input
+          className="search-input"
+          placeholder="🔍 Buscar artículo, finca, OC…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+        <div className="filter-chips">
+          {FILTER_LABELS.map(([v, l]) => (
+            <button
+              key={v}
+              className={`chip ${filter === v ? "chip-active" : ""}`}
+              onClick={() => setFilter(v)}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
       </div>
 
       {selected.size > 0 && (
@@ -51,7 +99,12 @@ export default function OcList({ groups, activeId, selected, onClickRow, onToggl
       )}
 
       <div className="oc-scroll">
-        {groups.map(({ codigoArticulo, articulo, ordenes }) => {
+        {visibleGroups.length === 0 && (
+          <div className="empty-state" style={{ minHeight: 200 }}>
+            <p>Sin resultados para la búsqueda actual</p>
+          </div>
+        )}
+        {visibleGroups.map(({ codigoArticulo, articulo, ordenes }) => {
           const isCollapsed = collapsed.has(codigoArticulo);
           const minDias = Math.min(...ordenes.map(o => o.diasVencimiento));
           const hasUrgente = ordenes.some(o => o.urgente);
@@ -73,9 +126,10 @@ export default function OcList({ groups, activeId, selected, onClickRow, onToggl
                     {daysLabel(minDias)}d
                   </span>
                   <span className="art-group-badge" style={{ background: "#555" }}>{ordenes.length} fincas</span>
+                  {/* Fix #1: always pass the actual IDs; Dashboard.handleSelectGroup toggles them */}
                   <button
                     className="btn-sel-group"
-                    onClick={e => { e.stopPropagation(); onSelectGroup(allSel ? [] : allGroupIds(ordenes)); }}
+                    onClick={e => { e.stopPropagation(); onSelectGroup(ordenes.map(o => o.id)); }}
                   >
                     {allSel ? "Desmarcar" : "Seleccionar grupo"}
                   </button>
