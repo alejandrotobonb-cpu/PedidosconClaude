@@ -103,23 +103,24 @@
   /* Grupos de artículo */
   .art-group    { border-bottom: 2px solid #e8f5e9; }
   .art-group-header {
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; flex-direction: column; gap: 5px;
     padding: 8px 12px; background: #f1f8f1;
     cursor: pointer; user-select: none;
     border-bottom: 1px solid #dcedc8;
     position: sticky; top: 0; z-index: 4;
   }
   .art-group-header:hover { background: #e8f5e9; }
-  .art-group-left  { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+  .art-group-left  { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .art-group-icon  { font-size: 12px; color: #555; transition: transform .2s; flex-shrink: 0; }
   .art-group-icon.collapsed { transform: rotate(-90deg); }
+  .art-group-name-wrap { flex: 1; min-width: 0; overflow: hidden; }
   .art-group-name  { font-size: 12px; font-weight: 700; color: #1B5E20; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .art-group-code  { font-size: 10px; color: #888; flex-shrink: 0; }
-  .art-group-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .art-group-code  { font-size: 10px; color: #888; }
+  .art-group-right { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; padding-left: 20px; }
   .art-group-badge { font-size: 10px; background: #2E7D32; color: #fff; border-radius: 10px; padding: 1px 7px; white-space: nowrap; }
   .art-group-badge.warn { background: #E65100; }
   .art-group-badge.danger { background: #C62828; }
-  .btn-sel-group   { font-size: 10px; background: #E8F5E9; border: 1px solid #A5D6A7; color: #1B5E20; border-radius: 3px; padding: 2px 6px; cursor: pointer; white-space: nowrap; }
+  .btn-sel-group   { font-size: 10px; background: #E8F5E9; border: 1px solid #A5D6A7; color: #1B5E20; border-radius: 3px; padding: 2px 6px; cursor: pointer; white-space: nowrap; margin-left: auto; }
   .btn-sel-group:hover { background: #C8E6C9; }
   .art-group-items.collapsed { display: none; }
 
@@ -528,7 +529,7 @@ function renderList() {
       <div class="art-group-header" onclick="toggleGroup('${grpKey}')">
         <div class="art-group-left">
           <span class="art-group-icon" id="icon-${grpKey}">▼</span>
-          <div>
+          <div class="art-group-name-wrap">
             <div class="art-group-name">${items[0].articulo}</div>
             <div class="art-group-code">${grpKey}</div>
           </div>
