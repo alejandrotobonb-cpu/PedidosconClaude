@@ -3,104 +3,111 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Portal.Domain.Entities;
+using Portal.Domain.Interfaces;
 using Portal.Infrastructure.Persistence;
-using System.Net.Http.Json;
 
 namespace Portal.Infrastructure.SagAdapter;
 
 public class SagSyncService(
     IServiceScopeFactory scopeFactory,
-    IHttpClientFactory httpClientFactory,
-    ILogger<SagSyncService> logger) : BackgroundService
+    ILogger<SagSyncService> logger) : BackgroundService, ISagSyncService
 {
-    private readonly TimeSpan _interval = TimeSpan.FromMinutes(15);
+    private readonly TimeSpan _intervalo = TimeSpan.FromMinutes(15);
+    private SagSyncResult? _ultimoResultado;
+
+    public SagSyncResult? UltimoResultado => _ultimoResultado;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        logger.LogInformation("SAG Sync Service iniciado — intervalo {Min} min", _intervalo.TotalMinutes);
+
         while (!stoppingToken.IsCancellationRequested)
         {
-            try
-            {
-                await SincronizarTodasLasOcAsync(stoppingToken);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error durante sincronización SAG");
-            }
-            await Task.Delay(_interval, stoppingToken);
+            _ultimoResultado = await SincronizarAhoraAsync(stoppingToken);
+            await Task.Delay(_intervalo, stoppingToken);
         }
     }
 
-    private async Task SincronizarTodasLasOcAsync(CancellationToken ct)
+    public async Task<SagSyncResult> SincronizarAhoraAsync(CancellationToken ct = default)
     {
+        var inicio = DateTime.UtcNow;
+        var detalle = new List<string>();
+        int procesados = 0, insertadas = 0, actualizadas = 0, errores = 0;
+
         using var scope = scopeFactory.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PortalDbContext>();
-        var client = httpClientFactory.CreateClient("SAG");
+        var sagClient = scope.ServiceProvider.GetRequiredService<ISagClient>();
 
-        var proveedores = await db.Proveedores
+        var nits = await db.Proveedores
             .Where(p => p.Activo)
             .Select(p => p.Nit)
             .ToListAsync(ct);
 
-        foreach (var nit in proveedores)
+        logger.LogInformation("SAG Sync → {Count} proveedores activos", nits.Count);
+
+        foreach (var nit in nits)
         {
-            await SincronizarProveedorAsync(db, client, nit, ct);
+            try
+            {
+                var ordenes = await sagClient.ObtenerOrdenesPendientesAsync(nit, ct);
+                var (ins, act) = await UpsertOrdenesAsync(db, ordenes, ct);
+                insertadas += ins;
+                actualizadas += act;
+                procesados++;
+                detalle.Add($"NIT {nit}: {ins} nuevas, {act} actualizadas");
+            }
+            catch (Exception ex)
+            {
+                errores++;
+                var msg = $"NIT {nit}: ERROR — {ex.Message}";
+                detalle.Add(msg);
+                logger.LogError(ex, "SAG Sync → {Msg}", msg);
+            }
         }
+
+        var resultado = new SagSyncResult(
+            procesados, insertadas, actualizadas, errores,
+            inicio, DateTime.UtcNow, detalle);
+
+        logger.LogInformation(
+            "SAG Sync completado — {P} proveedores, {I} insertadas, {A} actualizadas, {E} errores — {Ms}ms",
+            procesados, insertadas, actualizadas, errores,
+            (resultado.Fin - inicio).TotalMilliseconds);
+
+        return resultado;
     }
 
-    private async Task SincronizarProveedorAsync(
-        PortalDbContext db, HttpClient client, string nit, CancellationToken ct)
+    private static async Task<(int insertadas, int actualizadas)> UpsertOrdenesAsync(
+        PortalDbContext db, IReadOnlyList<OrdenCompra> ordenes, CancellationToken ct)
     {
-        var response = await client.GetFromJsonAsync<SagOcResponse>(
-            $"/api/oc/pendientes?nit={nit}", ct);
+        int ins = 0, act = 0;
 
-        if (response is null) return;
-
-        foreach (var dto in response.Ordenes)
+        foreach (var oc in ordenes)
         {
-            var existente = await db.OrdenesCompra
-                .FirstOrDefaultAsync(o => o.NumeroOc == dto.NumeroOc && o.CodigoArt == dto.CodigoArticulo, ct);
+            var existente = await db.OrdenesCompra.FirstOrDefaultAsync(
+                o => o.NumeroOc == oc.NumeroOc && o.CodigoArt == oc.CodigoArt, ct);
 
             if (existente is null)
             {
-                db.OrdenesCompra.Add(MapearOrden(dto, nit));
+                db.OrdenesCompra.Add(oc);
+                ins++;
             }
             else
             {
-                ActualizarOrden(existente, dto);
+                existente.FuenteFinca    = oc.FuenteFinca;
+                existente.Descripcion    = oc.Descripcion;
+                existente.FechaPedido    = oc.FechaPedido;
+                existente.FechaEntrega   = oc.FechaEntrega;
+                existente.CantidadPedida = oc.CantidadPedida;
+                existente.CantidadPend   = oc.CantidadPend;
+                existente.ObsCompras     = oc.ObsCompras;
+                existente.Urgente        = oc.Urgente;
+                existente.SincronizadoEn = DateTime.UtcNow;
+                act++;
             }
         }
 
         await db.SaveChangesAsync(ct);
-        logger.LogInformation("SAG sync OK para NIT {Nit}: {Count} órdenes", nit, response.Ordenes.Count);
-    }
-
-    private static OrdenCompra MapearOrden(SagOrdenDto dto, string nit) => new()
-    {
-        NumeroOc = dto.NumeroOc,
-        ProveedorNit = nit,
-        FuenteFinca = dto.FuenteFinca,
-        CodigoArt = dto.CodigoArticulo,
-        Descripcion = dto.Descripcion,
-        FechaPedido = dto.FechaPedido,
-        FechaEntrega = dto.FechaEntrega,
-        CantidadPedida = dto.CantidadPedida,
-        CantidadPend = dto.CantidadPendiente,
-        ObsCompras = dto.Observaciones,
-        Urgente = dto.Urgente,
-        SincronizadoEn = DateTime.UtcNow
-    };
-
-    private static void ActualizarOrden(OrdenCompra oc, SagOrdenDto dto)
-    {
-        oc.FuenteFinca = dto.FuenteFinca;
-        oc.Descripcion = dto.Descripcion;
-        oc.FechaPedido = dto.FechaPedido;
-        oc.FechaEntrega = dto.FechaEntrega;
-        oc.CantidadPedida = dto.CantidadPedida;
-        oc.CantidadPend = dto.CantidadPendiente;
-        oc.ObsCompras = dto.Observaciones;
-        oc.Urgente = dto.Urgente;
-        oc.SincronizadoEn = DateTime.UtcNow;
+        return (ins, act);
     }
 }

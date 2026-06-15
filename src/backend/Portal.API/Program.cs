@@ -44,7 +44,8 @@ using (var scope = app.Services.CreateScope())
         await DevDataSeeder.SeedAsync(db);
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+    app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();

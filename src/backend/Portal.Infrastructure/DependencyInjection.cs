@@ -48,21 +48,32 @@ public static class DependencyInjection
             services.AddSingleton<IEmailService, NoOpEmailService>();
         }
 
-        // SAG sync: solo si hay URL configurada
+        // SAG HTTP client
         var sagBaseUrl = configuration["SagApi:BaseUrl"];
+        var sagToken = configuration["SagApi:Token"];
         if (!string.IsNullOrWhiteSpace(sagBaseUrl) && !sagBaseUrl.StartsWith("YOUR_"))
         {
             services.AddHttpClient("SAG", client =>
             {
                 client.BaseAddress = new Uri(sagBaseUrl);
-                client.DefaultRequestHeaders.Add("Authorization",
-                    $"Bearer {configuration["SagApi:Token"]}");
+                if (!string.IsNullOrWhiteSpace(sagToken))
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {sagToken}");
             });
-            services.AddHostedService<SagSyncService>();
         }
         else
         {
             services.AddHttpClient("SAG");
+        }
+
+        // SAG services — siempre registrados para que SagController resuelva ISagSyncService
+        services.AddScoped<ISagClient, SagClient>();
+        services.AddSingleton<SagSyncService>();
+        services.AddSingleton<ISagSyncService>(sp => sp.GetRequiredService<SagSyncService>());
+
+        // Background sync automático: solo con URL real configurada
+        if (!string.IsNullOrWhiteSpace(sagBaseUrl) && !sagBaseUrl.StartsWith("YOUR_"))
+        {
+            services.AddHostedService(sp => sp.GetRequiredService<SagSyncService>());
         }
 
         return services;
