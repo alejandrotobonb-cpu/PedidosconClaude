@@ -16,7 +16,7 @@ public class OrdenCompraConfiguration : IEntityTypeConfiguration<OrdenCompra>
         builder.Property(o => o.CodigoArt).HasMaxLength(50);
         builder.Property(o => o.CantidadPedida).HasColumnType("decimal(10,2)");
         builder.Property(o => o.CantidadPend).HasColumnType("decimal(10,2)");
-        builder.Property(o => o.SincronizadoEn).HasDefaultValueSql("GETUTCDATE()");
+        builder.Property(o => o.SincronizadoEn).HasDefaultValueSql("CURRENT_TIMESTAMP");
         builder.HasIndex(o => new { o.NumeroOc, o.CodigoArt }).IsUnique();
         builder.Ignore(o => o.DiasVencimiento);
 

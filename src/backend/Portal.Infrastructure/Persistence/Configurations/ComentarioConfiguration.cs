@@ -13,8 +13,8 @@ public class ComentarioConfiguration : IEntityTypeConfiguration<Comentario>
         builder.Property(c => c.ProveedorNit).HasMaxLength(20).IsRequired();
         builder.Property(c => c.Texto).IsRequired();
         builder.Property(c => c.NumeroGuia).HasMaxLength(100);
-        builder.Property(c => c.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
-        builder.Property(c => c.UpdatedAt).HasDefaultValueSql("GETUTCDATE()");
+        builder.Property(c => c.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        builder.Property(c => c.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.HasOne(c => c.OrdenCompra)
             .WithMany(o => o.Comentarios)

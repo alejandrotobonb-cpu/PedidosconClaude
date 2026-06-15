@@ -15,6 +15,6 @@ public class ProveedorConfiguration : IEntityTypeConfiguration<Proveedor>
         builder.Property(p => p.Nombre).HasMaxLength(200).IsRequired();
         builder.Property(p => p.EmailSac).HasMaxLength(100).IsRequired();
         builder.Property(p => p.CompradorEmail).HasMaxLength(100).IsRequired();
-        builder.Property(p => p.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+        builder.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
     }
 }

@@ -6,10 +6,12 @@ import {
   UnauthenticatedTemplate,
 } from "@azure/msal-react";
 import { loginRequest } from "./authConfig";
-import { initApiAuth } from "./services/api";
+import { initApiAuth, setDevMode } from "./services/api";
 import InstructivoPage from "./pages/InstructivoPage";
 import MainPage from "./pages/MainPage";
 import "./App.css";
+
+const DEV_BYPASS = import.meta.env.VITE_DEV_BYPASS === "true";
 
 function App() {
   const isAuthenticated = useIsAuthenticated();
@@ -17,18 +19,33 @@ function App() {
   const [mostrarInstructivo, setMostrarInstructivo] = useState(true);
 
   useEffect(() => {
+    if (DEV_BYPASS) {
+      setDevMode(true);
+      return;
+    }
     if (isAuthenticated && accounts[0]) {
       initApiAuth(instance, accounts[0]);
     }
   }, [isAuthenticated, instance, accounts]);
 
-  const handleLogin = () => {
-    instance.loginPopup(loginRequest).catch(console.error);
-  };
+  if (DEV_BYPASS) {
+    return mostrarInstructivo ? (
+      <InstructivoPage
+        usuario="proveedor@dev.local"
+        onContinuar={() => setMostrarInstructivo(false)}
+      />
+    ) : (
+      <MainPage
+        usuario="proveedor@dev.local"
+        onLogout={() => setMostrarInstructivo(true)}
+      />
+    );
+  }
 
-  const handleLogout = () => {
+  const handleLogin = () =>
+    instance.loginPopup(loginRequest).catch(console.error);
+  const handleLogout = () =>
     instance.logoutPopup().catch(console.error);
-  };
 
   return (
     <>

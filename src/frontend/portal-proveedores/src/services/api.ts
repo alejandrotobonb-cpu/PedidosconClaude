@@ -5,6 +5,7 @@ import type { OrdenPendiente, GuardarComentarioRequest } from "../types";
 
 let msalInstance: IPublicClientApplication | null = null;
 let activeAccount: AccountInfo | null = null;
+let devMode = false;
 
 export function initApiAuth(
   instance: IPublicClientApplication,
@@ -14,9 +15,14 @@ export function initApiAuth(
   activeAccount = account;
 }
 
+export function setDevMode(enabled: boolean) {
+  devMode = enabled;
+}
+
 const client = axios.create({ baseURL: apiConfig.baseUrl });
 
 client.interceptors.request.use(async (config) => {
+  if (devMode) return config;          // dev bypass: sin token
   if (!msalInstance || !activeAccount) return config;
   const result = await msalInstance.acquireTokenSilent({
     ...loginRequest,
